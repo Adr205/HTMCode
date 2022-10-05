@@ -1,0 +1,32 @@
+function sum(x:int, y:int) : int {
+	if(x < y){
+		return x + y;
+    }else{
+	    return x - y;
+    }
+}
+
+function printSum(z : float): void {
+	var b: float = 1;
+	for(x = 0; x < z; x++ ){
+	    print("Numero vale: ", x + b );
+    }
+}
+
+function createPage(name: string): void{
+	newPage(name);
+	page = getPage(name);
+	
+    newHeader(page,1, name);
+	newNav(page);
+
+	for( x = 0; x < 4; x++){
+		newA(x);	
+    }
+    endNav(page);
+}
+
+
+main(){
+createPage("Home");
+}

@@ -1,0 +1,31 @@
+
+function createLogin() : void {
+	newPage("login");
+	loginPage = getPage("login");
+	startDiv(loginPage);
+    startDiv(loginPage);
+    newLabel(loginPage, "Email");
+    newInput(loginPage, text);
+    newLabel(loginPage, "Password");
+    newInput(loginPage, password);
+	endDiv(loginPage);
+	newButton(loginPage,"Login");
+	endDiv(loginPage);
+}
+
+
+main(){
+	a = 2;
+	b  = 1.2; 
+    pi = 3.14 ;
+    z = 99;
+    pages = ["home", "contact", "About"];
+
+while(z > 0){
+	z = sum(z,a);
+}
+for(x = 0; x < size; x++){
+      createPage(pages[x]);
+}
+	createLogin();
+}

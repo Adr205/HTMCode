@@ -61,7 +61,9 @@ globales: funciones globales| varglobales globales |
 funciones: funcionvoid | funcion
 funcionvoid: FUNCION ID PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS VOID bloque
 funcion: FUNCION ID PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS tipo bloquefunc 
-varglobales: DECLARE ID IGUAL expresion PUNTOYCOMA | DECLARE ID CORCHETE_I INT CORCHETE_D IGUAL expresion PUNTOYCOMA
+varglobales: simpleglobal | compuestoglobal
+simpleglobal: DECLARE ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID DOSPUNTOS tipo PUNTOYCOMA
+compuestoglobal:DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
 funcvars: ID DOSPUNTOS tipo funcvarsx |
 funcvarsx: COMA funcvars |
 main: MAIN PARENTESIS_I PARENTESIS_D bloque

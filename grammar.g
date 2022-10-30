@@ -9,6 +9,7 @@ FOR: "for"
 WHILE: "while"
 INTT: "int"
 STRINGT: "string"
+FLOATT: "float"
 BOOLEANT: "boolean"
 PRINT: "print"
 INPUT: "input"
@@ -50,10 +51,11 @@ NUMERO: /\d+/
 INT: /\d+/
 STRING: /\".*\"/
 FLOAT: /\d+\.\d+/
-FLOATT: "float"
 WHITESPACE: (" " | /\t/ )+
+
 %ignore WHITESPACE
-%ignore NEW_LINE      
+%ignore NEW_LINE
+%import common.ESCAPED_STRING  -> ACCION
 
 start: globales main 
 
@@ -66,16 +68,31 @@ simpleglobal: DECLARE ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID 
 compuestoglobal:DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
 funcvars: ID DOSPUNTOS tipo funcvarsx |
 funcvarsx: COMA funcvars |
-main: MAIN PARENTESIS_I PARENTESIS_D bloque
+main: MAIN PARENTESIS_I PARENTESIS_D bloque end
 
 bloque: LLAVEI bloq bloqx LLAVED
-bloq: estatuto
+bloq:  estatuto | declaracion
 bloqx: bloq bloqx |
 bloquefunc: LLAVEI bloq bloqx RETURN expresion PUNTOYCOMA LLAVED
 estatuto: asignacion | escritura | read  | llamadavoid | ciclos | condicion
 
+declaraciones: declaracion declaracionesx
+declaracionesx: declaraciones |
+declaracion: simple | compuesta
+simple: simpledeclaracion | simpleasignacion
+simpledeclaracion: VAR ID DOSPUNTOS tipo PUNTOYCOMA
+simpleasignacion: VAR ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA
+compuesta: compuestadeclaracion | compuestaasignacion
+compuestadeclaracion: VAR ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
+compuestaasignacion: VAR ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL CORCHETE_I expresionasig CORCHETE_D PUNTOYCOMA 
+expresionasig: expresion COMA expresionasig | expresion
+
+
 asignacion: asignacionsimple | asignacioncompleja
-asignacionsimple: ID IGUAL expresion PUNTOYCOMA
+asignacionsimple: ID IGUAL expresion PUNTOYCOMA np_asignacion
+np_asignacion:
+//np_var:
+
 asignacioncompleja: ID CORCHETE_I INT CORCHETE_D IGUAL expresion PUNTOYCOMA | asignacionlista
 asignacionlista: ID IGUAL expresionlista PUNTOYCOMA
 expresionlista: CORCHETE_I expresion explista CORCHETE_D
@@ -89,16 +106,23 @@ escrituray: COMA escriturax |
 read: INPUT PARENTESIS_I ID PARENTESIS_D PUNTOYCOMA
 
 ciclos: ciclofor | ciclowhile
+
 ciclofor: FOR PARENTESIS_I asignacionsimple expresion PUNTOYCOMA contador PARENTESIS_D bloque
 contador: contadorsimple | contadorcomplejo
 contadorsimple: ID contadorhelpersimple 
 contadorhelpersimple: MASMAS | MENOSMENOS
 contadorcomplejo: ID contadorhelpercomplejo INT
 contadorhelpercomplejo: MULTIGUAL | DIVIGUAL | MASIGUAL | MENOSIGUAL
-ciclowhile: WHILE PARENTESIS_I expresion PARENTESIS_D bloque
 
-condicion: IF PARENTESIS_I expresion PARENTESIS_D bloque condicionx
-condicionx: ELSE bloque |
+ciclowhile: WHILE PARENTESIS_I expresion np_while PARENTESIS_D bloque np_while_2
+np_while:
+np_while_2:
+
+condicion: IF PARENTESIS_I expresion PARENTESIS_D np_if bloque  condicionx
+condicionx: np_if_3 ELSE bloque np_if_2 | np_if_2
+np_if:
+np_if_2:
+np_if_3:
 
 llamadavoid: ID PARENTESIS_I voidvars PARENTESIS_D PUNTOYCOMA
 llamadafunc: ID PARENTESIS_I voidvars PARENTESIS_D
@@ -106,18 +130,34 @@ voidvars: exp vvars |
 vvars: COMA exp vvars | 
 
 expresion: exp expresionx
-expresionx: logicos exp |
-logicos: MAYOR | MENOR | MENORIGUAL | MAYORIGUAL | ES_DIFERENTE | ES_IGUAL
+expresionx: logicos exp np_logico_2 |
+logicos: MAYOR -> np_logico | MENOR -> np_logico | MENORIGUAL -> np_logico | MAYORIGUAL -> np_logico | ES_DIFERENTE  -> np_logico | ES_IGUAL -> np_logico
+np_logico:
+np_logico_2:
+
 exp: termino expx
-expx: expy exp |
+expx: expy exp cuadruplo_sr |
 expy: SUMA | RESTA
+cuadruplo_sr:
+
 termino: factor terminox
-terminox: terminoy termino | 
+terminox: terminoy termino cuadruplo_md | 
 terminoy: MULTIPLICACION | DIVISION
+cuadruplo_md:
+
 factor: PARENTESIS_I expresion PARENTESIS_D | factorx varcte | varcte
 factorx: SUMA | RESTA
-varcte: ID | INT | boolean | llamadafunc | CORCHETE_I exp CORCHETE_D | FLOAT | STRING | arreglo
+
+
+varcte: boolean | id  | int | llamadafunc | CORCHETE_I exp CORCHETE_D | float | string | arreglo
+id: ID -> guardar_id
+int: INT ->  guardar_int
+float: FLOAT -> guardar_float
+string: STRING -> guardar_string
 arreglo: ID CORCHETE_I INT CORCHETE_D | ID CORCHETE_I ID CORCHETE_D
 
+
 tipo: INTT | FLOATT | STRINGT | BOOLEANT
-boolean: TRUE | FALSE
+boolean: TRUE -> guardar_boolean | FALSE -> guardar_boolean
+
+end:

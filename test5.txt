@@ -1,0 +1,16 @@
+main(){
+    if(x+1*2 < 2+1/2){
+        print("x is true");
+    }else{
+        print("x is false");
+    }
+
+    for(x=0; x<10; x++){
+        print(x);
+    }
+
+    while(x<10){
+        print(x);
+        x = x + 1;
+    }
+}

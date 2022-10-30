@@ -15,6 +15,9 @@ function createLogin() : void {
 
 
 main(){
+	var a : int;
+	var b : float;
+	var exist : boolean = false;
 	a = 2;
 	b  = 1.2; 
     pi = 3.14 ;
@@ -22,7 +25,7 @@ main(){
     pages = ["home", "contact", "About"];
 
 while(z > 0){
-	z = sum(z,a);
+	z = z - 1;
 }
 for(x = 0; x < size; x++){
       createPage(pages[x]);

@@ -1,0 +1,17 @@
+
+
+
+main(){
+    var a : int;
+    var x : boolean;
+    var z : string;
+    var f : float;
+	var b : float = 3.14;
+	var exist : boolean = false;
+    var str: string = "Hola";
+	var pages[5] : string;
+	var webPages[5] : string = ["one", "two", "three", "four", "five"];
+    var array[5] : int = [1, 2, 3, 4, 5];
+    var arrBool[5] : boolean = [true, false, true, false, true];
+    var arrFloat[5] : float = [1.1, 2.2, 3.3, 4.4, 5.5];
+}

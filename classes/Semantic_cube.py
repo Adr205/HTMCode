@@ -1,4 +1,4 @@
-class SemanticCube:
+class SemanticCube():
 
     '''
         Cubo semantico en el que se accesa con la siguiente estructura:

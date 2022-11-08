@@ -3,7 +3,7 @@ from lark import Visitor
 from classes.NeuralPoints import NeuralPoints
 from classes.Semantic_cube import SemanticCube
 
-test = 'testVar.txt'
+test = 'testV.txt'
 parser = Lark(open("grammar.g", 'r').read())
 result = ''
 

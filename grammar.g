@@ -107,12 +107,15 @@ read: INPUT PARENTESIS_I ID PARENTESIS_D PUNTOYCOMA
 
 ciclos: ciclofor | ciclowhile
 
-ciclofor: FOR PARENTESIS_I asignacionsimple expresion PUNTOYCOMA contador PARENTESIS_D bloque
+ciclofor: FOR np_for PARENTESIS_I asignacionsimple np_for_false contador PUNTOYCOMA  expresion PARENTESIS_D bloque np_for_2
 contador: contadorsimple | contadorcomplejo
 contadorsimple: ID contadorhelpersimple 
 contadorhelpersimple: MASMAS | MENOSMENOS
 contadorcomplejo: ID contadorhelpercomplejo INT
 contadorhelpercomplejo: MULTIGUAL | DIVIGUAL | MASIGUAL | MENOSIGUAL
+np_for:
+np_for_2:
+np_for_false:
 
 ciclowhile: WHILE PARENTESIS_I expresion np_while PARENTESIS_D bloque np_while_2
 np_while:

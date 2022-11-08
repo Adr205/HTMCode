@@ -1,0 +1,10 @@
+main(){
+    var x: boolean = false;
+    var y: int = 1; 
+    var z: float = 3.14;
+    var w: string = "hello";
+
+    for(i = 1; i++; i < 10){
+        y = 5;
+    }
+}

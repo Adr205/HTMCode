@@ -68,7 +68,8 @@ simpleglobal: DECLARE ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID 
 compuestoglobal:DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
 funcvars: ID DOSPUNTOS tipo funcvarsx |
 funcvarsx: COMA funcvars |
-main: MAIN PARENTESIS_I PARENTESIS_D bloque end
+main: MAIN np_main PARENTESIS_I PARENTESIS_D bloque end
+np_main:
 
 bloque: LLAVEI bloq bloqx LLAVED
 bloq:  estatuto | declaracion
@@ -81,11 +82,12 @@ declaracionesx: declaraciones |
 declaracion: simple | compuesta
 simple: simpledeclaracion | simpleasignacion
 simpledeclaracion: VAR ID DOSPUNTOS tipo PUNTOYCOMA
-simpleasignacion: VAR ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA
+simpleasignacion: VAR ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA np_asignacion_2
 compuesta: compuestadeclaracion | compuestaasignacion
 compuestadeclaracion: VAR ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
 compuestaasignacion: VAR ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL CORCHETE_I expresionasig CORCHETE_D PUNTOYCOMA 
 expresionasig: expresion COMA expresionasig | expresion
+np_asignacion_2:
 
 
 asignacion: asignacionsimple | asignacioncompleja
@@ -117,9 +119,10 @@ np_for:
 np_for_2:
 np_for_false:
 
-ciclowhile: WHILE PARENTESIS_I expresion np_while PARENTESIS_D bloque np_while_2
+ciclowhile: WHILE PARENTESIS_I np_while_3 expresion np_while PARENTESIS_D bloque np_while_2
 np_while:
 np_while_2:
+np_while_3:
 
 condicion: IF PARENTESIS_I expresion PARENTESIS_D np_if bloque  condicionx
 condicionx: np_if_3 ELSE bloque np_if_2 | np_if_2

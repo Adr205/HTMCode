@@ -1,4 +1,4 @@
-import classes.Variable as Var
+
 
 class VariablesTable:
 
@@ -31,9 +31,23 @@ class VariablesTable:
 
     def printTable(self):
         for var in self.variables:
-            print(self.variables[var])
-            self.variables[var].printVariable(self.variables[var])
-            # self.variables[var].printVariable()
+            var.printVariable()
+
+    def resetTable(self):
+        self.variables = {}
     
     def __str__(self):
-        return str(self.variables)
+        string = ""
+        for var in self.variables:
+            string += str(self.variables[var]) + "\n"
+        return string
+
+
+
+# table = VariablesTable()
+# # self, name, type, value="N/A", dirV = -1, scope= 'global', size = -1 
+# var = Var("a", "int", 5, 0)
+# table.addVariable(var)
+# var = Var("b", "float", 3.12, 0)
+# table.addVariable(var)
+# print(table)

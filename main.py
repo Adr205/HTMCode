@@ -2,9 +2,9 @@ from lark import Lark
 from lark import Visitor
 from classes.NeuralPoints import NeuralPoints
 from classes.Semantic_cube import SemanticCube
-
-test = 'testV.txt'
-parser = Lark(open("grammar.g", 'r').read())
+from htmcode import *
+test = 't-index.txt'
+parser = Lark(open("grammar.g", 'r').read()) 
 result = ''
 
 
@@ -21,6 +21,7 @@ def compile():
 
 def execute(result):
     NeuralPoints().visit_topdown(result)
+    virtualMachine()
     
 def main():
     compile()

@@ -61,33 +61,37 @@ start: globales main
 
 globales: funciones globales| varglobales globales | 
 funciones: funcionvoid | funcion
-funcionvoid: FUNCION ID PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS VOID bloque
-funcion: FUNCION ID PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS tipo bloquefunc 
+funcionvoid: FUNCION ID np_func_id PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS VOID bloque np_end_func
+funcion: FUNCION ID np_func_id PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS tipo bloquefunc np_end_func
 varglobales: simpleglobal | compuestoglobal
-simpleglobal: DECLARE ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID DOSPUNTOS tipo PUNTOYCOMA
+simpleglobal: DECLARE ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA np_asignacion | DECLARE ID DOSPUNTOS tipo PUNTOYCOMA
 compuestoglobal:DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
 funcvars: ID DOSPUNTOS tipo funcvarsx |
 funcvarsx: COMA funcvars |
 main: MAIN np_main PARENTESIS_I PARENTESIS_D bloque end
 np_main:
+np_func_id:
+np_end_func:
 
 bloque: LLAVEI bloq bloqx LLAVED
 bloq:  estatuto | declaracion
 bloqx: bloq bloqx |
-bloquefunc: LLAVEI bloq bloqx RETURN expresion PUNTOYCOMA LLAVED
+bloquefunc: LLAVEI bloq bloqx RETURN expresion PUNTOYCOMA np_func_result LLAVED
 estatuto: asignacion | escritura | read  | llamadavoid | ciclos | condicion
+np_func_result:
 
 declaraciones: declaracion declaracionesx
 declaracionesx: declaraciones |
 declaracion: simple | compuesta
 simple: simpledeclaracion | simpleasignacion
-simpledeclaracion: VAR ID DOSPUNTOS tipo PUNTOYCOMA
-simpleasignacion: VAR ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA np_asignacion_2
+simpledeclaracion: VAR ID np_is_var_false DOSPUNTOS tipo PUNTOYCOMA
+simpleasignacion: VAR ID np_is_var_false DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA np_asignacion_2
 compuesta: compuestadeclaracion | compuestaasignacion
 compuestadeclaracion: VAR ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
 compuestaasignacion: VAR ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL CORCHETE_I expresionasig CORCHETE_D PUNTOYCOMA 
 expresionasig: expresion COMA expresionasig | expresion
 np_asignacion_2:
+np_is_var_false:
 
 
 asignacion: asignacionsimple | asignacioncompleja
@@ -109,12 +113,13 @@ read: INPUT PARENTESIS_I ID PARENTESIS_D PUNTOYCOMA
 
 ciclos: ciclofor | ciclowhile
 
-ciclofor: FOR np_for PARENTESIS_I asignacionsimple np_for_false contador PUNTOYCOMA  expresion PARENTESIS_D bloque np_for_2
+ciclofor: FOR np_for PARENTESIS_I asignacionfor np_for_false contador PUNTOYCOMA  expresion PARENTESIS_D bloque np_for_2
 contador: contadorsimple | contadorcomplejo
 contadorsimple: ID contadorhelpersimple 
 contadorhelpersimple: MASMAS | MENOSMENOS
 contadorcomplejo: ID contadorhelpercomplejo INT
 contadorhelpercomplejo: MULTIGUAL | DIVIGUAL | MASIGUAL | MENOSIGUAL
+asignacionfor: ID IGUAL expresion PUNTOYCOMA
 np_for:
 np_for_2:
 np_for_false:
@@ -130,11 +135,12 @@ np_if:
 np_if_2:
 np_if_3:
 
-llamadavoid: ID PARENTESIS_I voidvars PARENTESIS_D PUNTOYCOMA
-llamadafunc: ID PARENTESIS_I voidvars PARENTESIS_D
+llamadavoid: ID PARENTESIS_I voidvars  np_func_vars PARENTESIS_D PUNTOYCOMA
+llamadafunc: ID PARENTESIS_I voidvars np_func_vars PARENTESIS_D
 voidvars: exp vvars |
 vvars: COMA exp vvars | 
-
+np_func_vars:
+ 
 expresion: exp expresionx
 expresionx: logicos exp np_logico_2 |
 logicos: MAYOR -> np_logico | MENOR -> np_logico | MENORIGUAL -> np_logico | MAYORIGUAL -> np_logico | ES_DIFERENTE  -> np_logico | ES_IGUAL -> np_logico

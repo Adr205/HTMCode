@@ -10,109 +10,46 @@ start
       bloq
         declaracion
           simple
-            simpleasignacion
+            simpledeclaracion
               var
               x
+              np_is_var_false
               :
-              tipo	boolean
-              =
-              expresion
-                exp
-                  termino
-                    factor
-                      varcte
-                        guardar_boolean	false
-                    terminox
-                  expx
-                expresionx
+              tipo	int
               ;
-              np_asignacion_2
       bloqx
         bloq
           declaracion
             simple
-              simpleasignacion
+              simpledeclaracion
                 var
-                y
+                b
+                np_is_var_false
                 :
-                tipo	int
-                =
-                expresion
-                  exp
-                    termino
-                      factor
-                        varcte
-                          guardar_int	1
-                      terminox
-                        terminoy	*
-                        termino
-                          factor
-                            varcte
-                              guardar_int	2
-                          terminox
-                            terminoy	*
-                            termino
-                              factor
-                                varcte
-                                  guardar_int	3
-                              terminox
-                            cuadruplo_md
-                        cuadruplo_md
-                    expx
-                      expy	-
-                      exp
-                        termino
-                          factor
-                            varcte
-                              guardar_int	4
-                          terminox
-                        expx
-                      cuadruplo_sr
-                  expresionx
+                tipo	boolean
                 ;
-                np_asignacion_2
         bloqx
           bloq
             declaracion
               simple
-                simpleasignacion
+                simpledeclaracion
                   var
-                  z
+                  s
+                  np_is_var_false
                   :
-                  tipo	float
-                  =
-                  expresion
-                    exp
-                      termino
-                        factor
-                          varcte
-                            guardar_float	3.14
-                        terminox
-                      expx
-                    expresionx
+                  tipo	string
                   ;
-                  np_asignacion_2
           bloqx
             bloq
               declaracion
                 simple
-                  simpleasignacion
+                  simpledeclaracion
                     var
-                    w
+                    y
+                    np_is_var_false
                     :
-                    tipo	string
-                    =
-                    expresion
-                      exp
-                        termino
-                          factor
-                            varcte
-                              guardar_string	"hello"
-                          terminox
-                        expx
-                      expresionx
+                    tipo	float
                     ;
-                    np_asignacion_2
             bloqx
               bloq
                 estatuto
@@ -128,212 +65,104 @@ start
                                 guardar_int	1
                             terminox
                           expx
+                            expy	+
+                            exp
+                              termino
+                                factor
+                                  varcte
+                                    guardar_int	2
+                                terminox
+                              expx
+                            cuadruplo_sr
                         expresionx
-                          np_logico	<
-                          exp
-                            termino
-                              factor
-                                varcte
-                                  guardar_int	1
-                              terminox
-                            expx
-                          np_logico_2
                       ;
                       np_asignacion
               bloqx
                 bloq
                   estatuto
-                    condicion
-                      if
-                      (
-                      expresion
-                        exp
-                          termino
-                            factor
-                              varcte
-                                guardar_id	x
-                            terminox
-                          expx
-                        expresionx
-                      )
-                      np_if
-                      bloque
-                        {
-                        bloq
-                          estatuto
-                            asignacion
-                              asignacionsimple
-                                y
-                                =
-                                expresion
+                    asignacion
+                      asignacionsimple
+                        y
+                        =
+                        expresion
+                          exp
+                            termino
+                              factor
+                                varcte
+                                  guardar_float	1.0
+                              terminox
+                            expx
+                              expy	+
+                              exp
+                                termino
+                                  factor
+                                    varcte
+                                      guardar_float	2.0
+                                  terminox
+                                    terminoy	*
+                                    termino
+                                      factor
+                                        varcte
+                                          guardar_float	3.0
+                                      terminox
+                                        terminoy	/
+                                        termino
+                                          factor
+                                            varcte
+                                              guardar_float	4.0
+                                          terminox
+                                        cuadruplo_md
+                                    cuadruplo_md
+                                expx
+                                  expy	-
                                   exp
                                     termino
                                       factor
                                         varcte
-                                          guardar_int	1
+                                          guardar_float	5.0
                                       terminox
                                     expx
-                                  expresionx
-                                ;
-                                np_asignacion
-                        bloqx
-                          bloq
-                            estatuto
-                              asignacion
-                                asignacionsimple
-                                  z
-                                  =
-                                  expresion
-                                    exp
-                                      termino
-                                        factor
-                                          varcte
-                                            guardar_float	1.0
-                                        terminox
-                                      expx
-                                        expy	+
-                                        exp
-                                          termino
-                                            factor
-                                              varcte
-                                                guardar_int	39
-                                            terminox
-                                          expx
-                                        cuadruplo_sr
-                                    expresionx
-                                  ;
-                                  np_asignacion
-                          bloqx
-                        }
-                      condicionx
-                        np_if_3
-                        else
-                        bloque
-                          {
-                          bloq
-                            estatuto
-                              asignacion
-                                asignacionsimple
-                                  y
-                                  =
-                                  expresion
-                                    exp
-                                      termino
-                                        factor
-                                          varcte
-                                            guardar_int	2
-                                        terminox
-                                      expx
-                                    expresionx
-                                  ;
-                                  np_asignacion
-                          bloqx
-                            bloq
-                              estatuto
-                                asignacion
-                                  asignacionsimple
-                                    z
-                                    =
-                                    expresion
-                                      exp
-                                        termino
-                                          factor
-                                            varcte
-                                              guardar_float	2.0
-                                          terminox
-                                        expx
-                                          expy	+
-                                          exp
-                                            termino
-                                              factor
-                                                varcte
-                                                  guardar_int	50
-                                              terminox
-                                            expx
-                                          cuadruplo_sr
-                                      expresionx
-                                    ;
-                                    np_asignacion
-                            bloqx
-                          }
-                        np_if_2
+                                  cuadruplo_sr
+                              cuadruplo_sr
+                          expresionx
+                        ;
+                        np_asignacion
                 bloqx
                   bloq
                     estatuto
-                      ciclos
-                        ciclowhile
-                          while
-                          (
-                          np_while_3
+                      asignacion
+                        asignacionsimple
+                          s
+                          =
                           expresion
                             exp
                               termino
                                 factor
                                   varcte
-                                    guardar_int	1
+                                    guardar_string	"hello"
                                 terminox
                               expx
                             expresionx
-                              np_logico	<
+                          ;
+                          np_asignacion
+                  bloqx
+                    bloq
+                      estatuto
+                        asignacion
+                          asignacionsimple
+                            b
+                            =
+                            expresion
                               exp
                                 termino
                                   factor
                                     varcte
-                                      guardar_int	10
+                                      guardar_boolean	true
                                   terminox
                                 expx
-                              np_logico_2
-                          np_while
-                          )
-                          bloque
-                            {
-                            bloq
-                              estatuto
-                                asignacion
-                                  asignacionsimple
-                                    y
-                                    =
-                                    expresion
-                                      exp
-                                        termino
-                                          factor
-                                            varcte
-                                              guardar_int	3
-                                          terminox
-                                        expx
-                                      expresionx
-                                    ;
-                                    np_asignacion
-                            bloqx
-                              bloq
-                                estatuto
-                                  asignacion
-                                    asignacionsimple
-                                      z
-                                      =
-                                      expresion
-                                        exp
-                                          termino
-                                            factor
-                                              varcte
-                                                guardar_float	3.0
-                                            terminox
-                                          expx
-                                            expy	+
-                                            exp
-                                              termino
-                                                factor
-                                                  varcte
-                                                    guardar_int	61
-                                                terminox
-                                              expx
-                                            cuadruplo_sr
-                                        expresionx
-                                      ;
-                                      np_asignacion
-                              bloqx
-                            }
-                          np_while_2
-                  bloqx
+                              expresionx
+                            ;
+                            np_asignacion
+                    bloqx
       }
     end

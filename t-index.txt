@@ -1,0 +1,12 @@
+
+
+main(){
+    var x: int;
+    var b: boolean;
+    var s: string;
+    var y: float;
+    x = 1 + 2;
+    y = 1.0 + 2.0 * 3.0 / 4.0 - 5.0;
+    s = "hello";
+    b = true;
+}

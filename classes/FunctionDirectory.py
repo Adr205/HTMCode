@@ -21,9 +21,17 @@ class FunctionDirectory:
         else:
             return None
 
+    def updateFunction(self, func):
+        if self.alreadyExists(func):
+            self.funcDirectory[func.name] = func
+        else:
+            print("Function ", func.name, " does not exist in directory")
+
+            
     def printDirectory(self):
         for func in self.funcDirectory:
             print(self.funcDirectory[func].name)
             self.funcDirectory[func].printFunction()
             
-    
+    def __str__(self):
+        return str(self.funcDirectory)

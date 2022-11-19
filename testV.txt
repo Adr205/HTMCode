@@ -2,22 +2,35 @@
 
 main(){
     var x: boolean = false;
+    x = true;
     var y: int = 1 * 2 * 3 - 4;
     var z: float = 3.14;
     var w: string = "hello";
+    w = "world";
 
     x = 1 < 1;
 
     if(x){
         y = 1;
-        z = 1.0 + 39;
+        z = 1.0 + 39 + 3.14;
     }else{
         y = 2;
         z = 2.0 + 50;
+        for(i = 0; i+=2; i < 10 / 2){
+            y = 4;
+            x = false;
+            z = 4.0 + 72;
+        }
     }
 
-    while(1 < 10){
+    w = "hello";
+    x = true;
+
+    while(y < 10){
         y = 3;
         z = 3.0 + 61;
+        x = true;
     }
+    w = "world";
+    x = false;
 }

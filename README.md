@@ -21,3 +21,8 @@ Se realizan los cuadruplos del while y for
 Existen unos problemas en el momento de tener un for dentro de un if, no se rellenan los cuadruplos correctamente.
 Existe un archivo de puntos neuralgicos y una copia de este mismo, ya que voy a refactorizar el codigo para que sea mas legible  y tenga una mejor documentacion para encontrar los problemas mas sencillo.
 
+<h2> Avance 6 </h2>
+Se refactorizo el codigo para que sea mas legible y simple. 
+Se corrigieron los errores de los cuadruplos de los for dentro de un if.
+Se añadio la maquina virtual, la memoria virtual y se escriben en un documento de texto las constantes creadas en compilacion, para tener acceso a ellas de manera global y asi evitar que se repitan.
+La maquina virtual ya realiza las expresiones aritmeticas basicas

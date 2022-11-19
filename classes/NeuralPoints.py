@@ -220,17 +220,24 @@ class NeuralPoints(Visitor):
 
     #* Funcion para manejar la asignacion de la variable del ciclo for
     def asignacionfor(self, tree):
+        global contIntVars
         varName = tree.children[0].value # Nombre de la variable
         pVars.append(varName) # Agregar variable a la pila de variables
-        tablaDeVariables.addVariable(Variable(varName, "int", 'N/A')) # Agregar variable a la tabla de variables
+        dirV = memoria.intLocal
+        memoria.intLocal += 1
+        contIntVars += 1
+        tablaDeVariables.addVariable(Variable(varName, "int", 'N/A', dirV)) # Agregar variable a la tabla de variables
     
     #* Funcion para igualar la variable del for y la VC
     def np_for_false(self, tree):
         result = pOp.pop()
         varName = pVars.pop()
         varType = pType.pop()
-        cuadruplos.addCuadruplo("=", result, None, varName)
-        cuadruplos.addCuadruplo("=", varName, None, "VC")
+        #TODO: Añadir contador de VC para manejar anidados, y buscar la dirv de variable y VC y VF
+        #TODO: Checar la direcion de VC < VF
+        varNameDir = tablaDeVariables.getVariable(varName).dirV
+        cuadruplos.addCuadruplo("=", result, None, varNameDir) 
+        cuadruplos.addCuadruplo("=", varNameDir, None, "VC")
 
     #* Funcion para guardar el contador del for y for's anidados
     def contador(self, tree):
@@ -425,7 +432,7 @@ class NeuralPoints(Visitor):
 
     #* Funcion para crear el cuadruplo logico
     def np_logico_2(self, tree):
-        global contVariablesTemporales
+        global contVariablesTemporales, contTempBool
         if len(pOper) > 0:
             right_operand = pOp.pop()
             left_operand = pOp.pop()
@@ -436,10 +443,17 @@ class NeuralPoints(Visitor):
             if result_type == "error":
                 print("Error: Tipo de dato no valido")
                 exit()
-            temp = memoria.intTemporal
+            temp = memoria.booleanTemporal
+            existLeft = tablaDeVariables.getVariable(left_operand)
+            existRight = tablaDeVariables.getVariable(right_operand)
+            if existLeft != None:
+                left_operand = existLeft.dirV
+            if existRight != None:
+                right_operand = existRight.dirV
             cuadruplos.addCuadruplo(operator, left_operand, right_operand, temp)
             contVariablesTemporales += 1
-            memoria.intTemporal += 1
+            memoria.booleanTemporal += 1
+            contTempBool += 1
             pOp.append(temp)
             pType.append(result_type)
             if pFor != []: #Si hay un for entonces añadirlos cuadruplos de igual a VF y comparacion de VC y VF

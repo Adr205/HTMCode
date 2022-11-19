@@ -5,10 +5,10 @@ from classes.FunctionDirectory import *
 
 '''
     TODO:   Guardar variables globales a memoria virtual global
-            Hacer la maquina virtual y minimo que resuelva las expresiones aritmeticas y logicas
+        #!  Hacer que la maquina virtual realize el ciclo FOR
+            Hacer la maquina virtual y minimo que resuelva las expresiones aritmeticas y logicas #! Falta hacer <=, >=, !=, ==, and, or
             Hacer la llamada a funciones tipadas
             Guardar el resultado de la funcion en una variable global con el nombre de la funcion
-            Contar la cantidad de temporales y variables de las funciones para el ERA
             Todo el codigo de Arreglos
         #!  Arreglar la commutividad por derecha y hacerla por izquierda
         #!  Añadir el uso de parentesis para las expresiones
@@ -41,9 +41,6 @@ def readConstantes():
         dirV = int(dirV)
         typ = typ.split(']')[0]
         typ = typ[2:-1]
-        # print(type(val),val)
-        # print(typ)
-        # print(dirV,val, type)
         if typ == 'int':
             val = int(val)
         elif typ == 'float':
@@ -55,7 +52,6 @@ def readConstantes():
                 val = True
             else:
                 val = False
-        # print(type(val),val)
         # tablaConst.append([dirV, val, typ])
         tablaConst[dirV] = [val, typ]
 
@@ -74,6 +70,8 @@ def readCuadruplos():
 #* Funcion para llenar la memoria virtual con las temporales y variables necesarias para la funcion
 def fillMemory(funcName):
     func = dirFunc[funcName]
+    # print(func.intTemp, func.floatTemp, func.stringTemp, func.boolTemp)
+    # print(func.intVar, func.floatVar, func.stringVar, func.booleanVar)
     if func.intVar > 0:
         for i in range(func.intVar):
             memoriaVirtual[dirIntVar + i] = None
@@ -237,7 +235,86 @@ def htmlCode():
                 left = memoriaVirtual[left]
             memoriaVirtual[result] = left
             cuadPointer += 1
-    print(memoriaVirtual)           
+        elif operator == '<':
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                left = memoriaVirtual[left]
+            if right >= 20000 and right < 29000:
+                val,type = tablaConst[right]
+                if type == 'int':
+                    right = int(val)
+                elif type == 'float':
+                    right = float(val)
+                elif type == 'string':
+                    right = val
+                elif type == 'boolean':
+                    right = val
+            else:
+                right = memoriaVirtual[right]
+            if left < right:
+                memoriaVirtual[result] = True
+            else:
+                memoriaVirtual[result] = False
+            cuadPointer += 1
+        elif operator == '>':
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                left = memoriaVirtual[left]
+            if right >= 20000 and right < 29000:
+                val,type = tablaConst[right]
+                if type == 'int':
+                    right = int(val)
+                elif type == 'float':
+                    right = float(val)
+                elif type == 'string':
+                    right = val
+                elif type == 'boolean':
+                    right = val
+            else:
+                right = memoriaVirtual[right]
+            if left > right:
+                memoriaVirtual[result] = True
+            else:
+                memoriaVirtual[result] = False
+            cuadPointer += 1
+        elif operator == 'GOTOF':
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                left = memoriaVirtual[left]
+            if left == False:
+                cuadPointer = result
+            else:
+                cuadPointer += 1
+        elif operator == 'GOTO':
+            cuadPointer = result
+    print(memoriaVirtual)
 
             
         

@@ -2,11 +2,22 @@
 
 main(){
     var x: int;
+    var cont: int = 0;
     var b: boolean;
     var s: string;
     var y: float;
-    x = 1 + 2;
+    x = 1 + 4 -1;
     y = 1.0 + 2.0 * 3.0 / 4.0 - 5.0;
     s = "hello";
     b = true;
+
+    if (x < 2){
+        x = 2;
+    } else {
+        x = 3;
+    }
+
+    for(i = 0; i++; i <10){
+        cont = cont + 1;
+    }
 }

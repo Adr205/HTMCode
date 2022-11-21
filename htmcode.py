@@ -2,6 +2,7 @@ import ast
 from classes.NeuralPoints import *
 from classes.Memoria import *
 from classes.FunctionDirectory import *
+from classes.VariablesTable import *
 
 '''
     TODO:   Guardar variables globales a memoria virtual global
@@ -12,6 +13,13 @@ from classes.FunctionDirectory import *
             Todo el codigo de Arreglos
         #!  Arreglar la commutividad por derecha y hacerla por izquierda
         #!  Añadir el uso de parentesis para las expresiones
+
+    TODO: #! Ejemplos de codigo obligatorios
+        Factorial recursivo
+        Fibonacci recursivo
+        Sort de un arreglo
+        Find de un arreglo
+        Pruebas propias del lenguaje
 
 '''
 # Direcciones base de memoria local y temporal para cada tipo de variable
@@ -26,8 +34,11 @@ dirBoolTemp = memoria.memoria['temporal']['boolean']
 
 
 memoriaVirtual = memoria.memoriaVirtual
+memorias = [] #* Lista de memorias virtuales
+goBack = []
 cuadruplos = []
 tablaConst = {}
+tablaGlobal = tablaDeVariables.globales
 cuadPointer = 0
 tablaVariable = []
 dirFunc = {}
@@ -93,12 +104,17 @@ def fillMemory(funcName):
     if func.stringTemp > 0:
         for i in range(func.stringTemp):
             memoriaVirtual[dirStringTemp + i] = None
-    if func.boolTemp > 0:
+    if func.booleanTemp > 0:
         for i in range(func.boolTemp):
             memoriaVirtual[dirBoolTemp + i] = None
 
+def saveMemory():
+    memorias.append(memoriaVirtual.copy())
+    memoriaVirtual.clear()
+
+
 def htmlCode():
-    global cuadPointer
+    global cuadPointer, memoriaVirtual, goBack
     
     operator = cuadruplos[cuadPointer][0]
     while operator != 'END':
@@ -110,6 +126,23 @@ def htmlCode():
         if operator == 'GOTO-MAIN':
             fillMemory("main")
             cuadPointer = int(result)
+        elif operator == 'ERA':
+            saveMemory()
+            fillMemory(result)
+            cuadPointer += 1
+        elif operator == 'PARAM':
+            if left in tablaConst:
+                memoriaVirtual[result] = tablaConst[left][0]
+            else:
+                
+                memoriaVirtual[result] = memorias[len(memorias)-1][left]
+            cuadPointer += 1
+        elif operator == 'GOSUB':
+            goBack.append(cuadPointer + 1)
+            cuadPointer = int(result)
+        elif operator == 'ENDFUNC':
+            cuadPointer = goBack.pop()
+            memoriaVirtual = memorias.pop()
         elif operator == '+':
             if left >= 20000 and left < 29000:
                 val,type = tablaConst[left]
@@ -231,9 +264,39 @@ def htmlCode():
                     left = val
                 elif type == 'boolean':
                     left = val
+            elif left >= 1000 and left < 9000:
+                left = tablaGlobal[left]
             else:
                 left = memoriaVirtual[left]
             memoriaVirtual[result] = left
+            cuadPointer += 1
+        elif operator == '++':
+            # ['++', 10003, 1, 30004]
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                left = memoriaVirtual[left]
+            if right >= 20000 and right < 29000:
+                val,type = tablaConst[right]
+                if type == 'int':
+                    right = int(val)
+                elif type == 'float':
+                    right = float(val)
+                elif type == 'string':
+                    right = val
+                elif type == 'boolean':
+                    right = val
+            else:
+                right = memoriaVirtual[right]
+            memoriaVirtual[result] = left + right
             cuadPointer += 1
         elif operator == '<':
             if left >= 20000 and left < 29000:
@@ -314,11 +377,42 @@ def htmlCode():
                 cuadPointer += 1
         elif operator == 'GOTO':
             cuadPointer = result
-    print(memoriaVirtual)
+        elif operator == 'PRINT':
+            if result >= 20000 and result < 29000:
+                val,type = tablaConst[result]
+                if type == 'int':
+                    result = str(int(val))
+                elif type == 'float':
+                    result = str(float(val))
+                elif type == 'string':
+                    result = val
+                elif type == 'boolean':
+                    result = val
+            else:
+                result = memoriaVirtual[result]
+            print(result)
+            cuadPointer += 1
+        elif operator == 'RETURN':
+            if result >= 20000 and result < 29000:
+                val,type = tablaConst[result]
+                if type == 'int':
+                    result = int(val)
+                elif type == 'float':
+                    result = float(val)
+                elif type == 'string':
+                    result = val
+                elif type == 'boolean':
+                    result = val
+            else:
+                result = memoriaVirtual[result]
+            tablaGlobal[left] = result
+            cuadPointer += 1
+
 
             
         
-
+def suma(left,right):
+    return left + right
 
     
 
@@ -328,6 +422,8 @@ def virtualMachine():
     tablaVariables = tablaDeVariables
     dirFunc = funcDirectory.funcDirectory
     # print(tabla)
+    # print(tablaGlobal)
+
     readConstantes()
     readCuadruplos()
     htmlCode()

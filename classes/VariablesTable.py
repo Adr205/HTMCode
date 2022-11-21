@@ -4,9 +4,16 @@ class VariablesTable:
 
     def __init__ (self):
         self.variables = {}
+        self.globales = {}
 
     def alreadyExists(self, var):
         if var in self.variables:
+            return True
+        else:
+            return False
+
+    def alreadyExistsGlobal(self, var):
+        if var in self.globales:
             return True
         else:
             return False
@@ -17,9 +24,21 @@ class VariablesTable:
         else: #Quitar en la entrega final
             print("Variable " ,var.name, " already exists in directory")
 
+    def addVariableGlobal(self, var):
+        if not self.alreadyExistsGlobal(var.name):
+            self.globales[var.name] = var
+        else: #Quitar en la entrega final
+            print("Variable " ,var.name, " already exists in directory")
+
     def updateVariable(self, var):
         if self.alreadyExists(var.name):
             self.variables[var.name] = var
+        else:
+            print("Variable " ,var.name, " does not exist in directory")
+
+    def updateVariableGlobal(self, var):
+        if self.alreadyExistsGlobal(var.name):
+            self.globales[var.name] = var
         else:
             print("Variable " ,var.name, " does not exist in directory")
 
@@ -29,18 +48,37 @@ class VariablesTable:
         else:
             return None
 
+    def getVariableGlobal(self, varName):
+        if varName in self.globales:
+            return self.globales[varName]
+        else:
+            return None
+
     def printTable(self):
         for var in self.variables:
             var.printVariable()
 
+    def printTableFGlobal(self):
+        for var in self.globales:
+            var.printVariable()
+
     def resetTable(self):
         self.variables = {}
+
+    def resetTableGlobal(self):
+        self.globales = {}
     
     def __str__(self):
         string = ""
         for var in self.variables:
             string += str(self.variables[var]) + "\n"
         return string
+    
+    def printGlobales(self):
+        string = ""
+        for var in self.globales:
+            string += str(self.globales[var]) + "\n"
+        print(string)
 
 
 

@@ -34,6 +34,7 @@ global VC, VF, contVariablesTemporales, contadores
 funcVars = 0
 VC = -1 
 VF = -1
+contFor = 0
 contVariablesTemporales = 0 #* Contador de variables temporales
 # * Object contadores  [{operation:, value:}]
 contadores = []
@@ -70,7 +71,7 @@ class NeuralPoints(Visitor):
     def np_main(self, tree):
         cuadruplos.fillCuadruplo(pSaltos.pop(), cuadruplos.contador)
         #* Resetear el valor de las variables locales
-        global contVariablesTemporales
+        global contVariablesTemporales, contTempInt, contTempFloat, contTempString, contTempBool, contIntVars, contFloatVars, contStringVars, contBoolVars
         contVariablesTemporales = 1
         memoria.intLocal = memoria.memoria["local"]["int"]
         memoria.floatLocal = memoria.memoria["local"]["float"]
@@ -80,6 +81,14 @@ class NeuralPoints(Visitor):
         memoria.floatTemporal = memoria.memoria["temporal"]["float"]
         memoria.stringTemporal = memoria.memoria["temporal"]["string"]
         memoria.booleanTemporal = memoria.memoria["temporal"]["boolean"]
+        contTempInt = 0
+        contTempFloat = 0
+        contTempString = 0
+        contTempBool = 0
+        contIntVars = 0
+        contFloatVars = 0
+        contStringVars = 0
+        contBoolVars = 0
         # func = Function(pOp.pop(), pType.pop(), cuadruplos.contador, params) # Crear funcion
         # funcDirectory.addFunction(func) # Agregar funcion al directorio de funciones
         funcMain = Function("main", "void", cuadruplos.contador, []) # Crear funcion
@@ -110,6 +119,7 @@ class NeuralPoints(Visitor):
         elif varType == 'boolean':
             dirV = memoria.booleanGlobal
             memoria.booleanGlobal += 1
+        tablaDeVariables.addVariableGlobal(Variable(varName, varType, varValue, dirV))
         tablaDeVariables.addVariable(Variable(varName, varType, varValue, dirV))
         # TODO: Usar variables temporales y el valor de la pila de operandos
         # cuadruplos.addCuadruplo("=", varValue, None, varName)
@@ -143,6 +153,7 @@ class NeuralPoints(Visitor):
             memoria.booleanLocal += 1
             contBoolVars += 1
         tablaDeVariables.addVariable(Variable(varName, varType, "N/A", dirV))
+        # print("Declaracion", pOp, pType)
 
     # * Funcion para declarar variables en la tabla de variables y asignarles un valor
     def simpleasignacion(self, tree):
@@ -193,6 +204,7 @@ class NeuralPoints(Visitor):
         if var == None:
             print("Error: Variable no declarada")
             exit()
+        # print("Asignacion Simple", pOp, pType)
 
     #! Funciones para generacion de cuadruplos del condicional IF
     #* Funcion para añadir el gotoF a la pila de saltos y crear el cuadruplo
@@ -230,14 +242,20 @@ class NeuralPoints(Visitor):
     
     #* Funcion para igualar la variable del for y la VC
     def np_for_false(self, tree):
+        global contFor, contIntVars
         result = pOp.pop()
         varName = pVars.pop()
         varType = pType.pop()
         #TODO: Añadir contador de VC para manejar anidados, y buscar la dirv de variable y VC y VF
         #TODO: Checar la direcion de VC < VF
+        contFor += 1
         varNameDir = tablaDeVariables.getVariable(varName).dirV
         cuadruplos.addCuadruplo("=", result, None, varNameDir) 
-        cuadruplos.addCuadruplo("=", varNameDir, None, "VC")
+        dirV = memoria.intLocal
+        memoria.intLocal += 1
+        contIntVars += 1
+        tablaDeVariables.addVariable(Variable("VC" + str(contFor-1), "int", "N/A", dirV))
+        cuadruplos.addCuadruplo("=", varNameDir, None, dirV)
 
     #* Funcion para guardar el contador del for y for's anidados
     def contador(self, tree):
@@ -250,14 +268,32 @@ class NeuralPoints(Visitor):
 
     #* Funcion para sumar la VC y llenar el cuadruplo del for y crear el GOTO del for
     def np_for_2(self, tree):
-        global contVariablesTemporales
+        global contVariablesTemporales, contFor, contInt, contIntVars, contTempInt
         pContador = pContadores.pop()
         temp = memoria.intTemporal
         memoria.intTemporal += 1
-        cuadruplos.addCuadruplo(pContador[1], "VC", pContador[2], 't' + str(temp))
+        dirVC = tablaDeVariables.getVariable("VC" + str(contFor-1)).dirV
+        # cont = tablaDeConstantes.getConstante(pContador[2]).dirC
+        cont = -1
+        exist = tablaDeConstantes.alreadyExists(int(pContador[2]))
+        if exist == False:
+            #TODO: Añadir el valor a la pila de memoria de constantes
+            dirV = memoria.memoria["constante"]["int"] + contInt
+            contInt += 1
+            tablaDeConstantes.addConstante(dirV, int(pContador[2]), "int")
+            cont = dirV 
+            # pOp.append(dirV)
+        else:
+            #TODO: Añadir el valor a la pila de memoria de constantes
+            cont = tablaDeConstantes.getDirV(int(pContador[2]))
+            # pOp.append(dirV)
+        cuadruplos.addCuadruplo(pContador[1], dirVC, cont,  temp)
         contVariablesTemporales += 1
-        cuadruplos.addCuadruplo("=", 't' + str(temp), None, 'VC')
-        cuadruplos.addCuadruplo("=", 't' + str(temp), None, pContador[0])
+        cuadruplos.addCuadruplo("=", temp, None, dirVC)
+        contTempInt += 1
+        dirContador = tablaDeVariables.getVariable(pContador[0]).dirV
+        cuadruplos.addCuadruplo("=", temp, None, dirContador)
+        contTempInt += 1
         fill = pSaltos.pop()
         add = pSaltos.pop()
         cuadruplos.addCuadruplo("GOTO", None, None, add)
@@ -325,6 +361,65 @@ class NeuralPoints(Visitor):
         funcType = tree.children[7].children[0].value # Tipo de la funcion
         pOp.append(varName) # Agregar nombre de la funcion a la pila de operandos
         pType.append(funcType) # Agregar tipo de la funcion a la pila de tipos
+        # print("Funcion",pOp, pType)
+        vars = tree.children[4].scan_values(lambda v: isinstance(v, Token))
+        dirFuncVar = -1
+        if funcType == "int":
+            dirFuncVar = memoria.intGlobal
+            memoria.intGlobal += 1
+        elif funcType == "float":
+            dirFuncVar = memoria.floatGlobal
+            memoria.floatGlobal += 1
+        elif funcType == "string":
+            dirFuncVar = memoria.stringGlobal
+            memoria.stringGlobal += 1
+        elif funcType == "boolean":
+            dirFuncVar = memoria.booleanGlobal
+            memoria.booleanGlobal += 1
+        tablaDeVariables.addVariableGlobal(Variable(varName, funcType, "N/A", dirFuncVar))
+        # print("Globales")
+        # tablaDeVariables.printGlobales()
+        global funcVars
+        for var in vars:
+            if var == "int" or var == "float" or var == "string" or var == "boolean":
+                pType.append(var.value)
+            elif var == ',' or var == ':':
+                pass
+            else:
+                pOp.append(var.value)
+                funcVars +=1
+        # print("Funcion final",pOp, pType)
+
+    # def funciones(self,tree):
+    #     global contInt, contFloat, contString, contBool
+    #     funcName = tree.children[0].children[1].value
+    #     funcType = tree.children[0].children[7].value
+    #     # funcType = tree.children[0].children[7].children[0].value
+    #     dirV = -1
+    #     # if varType == 'int':
+    #     #     dirV = memoria.intGlobal
+    #     #     memoria.intGlobal += 1
+    #     if funcType == "int":
+    #         dirV = memoria.intGlobal
+    #         memoria.intGlobal += 1
+    #     elif funcType == "float":
+    #         dirV = memoria.floatGlobal
+    #         memoria.floatGlobal += 1
+    #     elif funcType == "string":
+    #         dirV = memoria.stringGlobal
+    #         memoria.stringGlobal += 1
+    #     elif funcType == "boolean":
+    #         dirV = memoria.booleanGlobal
+    #         memoria.booleanGlobal += 1
+
+    #     print(funcName, funcType, dirV)
+
+    def funcionvoid(self,tree):
+        funcName = tree.children[1].value
+        funcType = tree.children[7].value
+        pOp.append(funcName)
+        pType.append(funcType)
+        pContexto.append(funcName) # Agregar el nombre de la funcion a la pila de contexto
         vars = tree.children[4].scan_values(lambda v: isinstance(v, Token))
         global funcVars
         for var in vars:
@@ -337,22 +432,52 @@ class NeuralPoints(Visitor):
                 funcVars +=1
 
     def np_func_id(self,tree):
-        global funcVars
+        global funcVars, contIntVars, contFloatVars, contStringVars, contBoolVars
         params = [] #Lista de parametros
+        pOp.reverse()
+        pType.reverse()
+        funcName = pOp.pop()
+        funcType = pType.pop()
+        dirV = -1
         for i in range(funcVars):
-            params.append([ pOp.pop(), pType.pop()])
-        params.reverse() # Invertir lista de parametros en orden correcto
-        func = Function(pOp.pop(), pType.pop(), cuadruplos.contador, params) # Crear funcion
+
+            varType = pType.pop()
+            if varType == 'int':
+                dirV = memoria.intLocal
+                memoria.intLocal += 1
+                contIntVars += 1
+            elif varType == 'float':
+                dirV = memoria.floatLocal
+                memoria.floatLocal += 1
+                contFloatVars += 1
+            elif varType == 'string':
+                dirV = memoria.stringLocal
+                memoria.stringLocal += 1
+                contStringVars += 1
+            elif varType == 'boolean':
+                dirV = memoria.booleanLocal
+                memoria.booleanLocal += 1
+                contBoolVars += 1
+            
+            varName = pOp.pop()
+            tablaDeVariables.addVariable(Variable(varName, varType, "N/A", dirV, "local"))
+            params.append([ varName, varType])
+        funcVars = 0
+        func = Function(funcName, funcType, cuadruplos.contador, params) # Crear funcion
         funcDirectory.addFunction(func) # Agregar funcion al directorio de funciones
 
     def np_func_result(self,tree):
         global funcVars
         funcVars = 0
         exist = tablaDeVariables.getVariable(pOp[-1])
+        # print("RETURN",exist) #! Añadir resultado a la tabla de variable de globales
+        funcDirVGlobal = tablaDeVariables.getVariableGlobal(pContexto[-1]).dirV        
+        
+
         if exist != None:
-            cuadruplos.addCuadruplo("RETURN", None, None, exist.dirV)
+            cuadruplos.addCuadruplo("RETURN", funcDirVGlobal, None, exist.dirV)
         else:
-            cuadruplos.addCuadruplo("RETURN", None, None, pOp[-1])
+            cuadruplos.addCuadruplo("RETURN", funcDirVGlobal, None, pOp[-1])
         funcType = pType.pop() # Tipo de la funcion
         result = pOp.pop() # Nombre de la funcion
         value = "Get Result" #Get value of var
@@ -362,17 +487,50 @@ class NeuralPoints(Visitor):
     def np_end_func(self, tree):
         if len(pIsVar) > 0:
             pIsVar.pop()
-        contTempInt = memoria.intTemporal - memoria.memoria["temporal"]["int"]
-        contTempFloat = memoria.floatTemporal - memoria.memoria["temporal"]["float"]
-        contTempString = memoria.stringTemporal - memoria.memoria["temporal"]["string"]
-        contTempBool = memoria.booleanTemporal - memoria.memoria["temporal"]["boolean"]
+        # memoria.booleanLocal = memoria.memoria["local"]["boolean"]
+        # memoria.intTemporal = memoria.memoria["temporal"]["int"]
+        contVInt = memoria.intLocal - memoria.memoria["local"]["int"] 
+        contVFloat = memoria.floatLocal - memoria.memoria["local"]["float"] 
+        contVString = memoria.stringLocal - memoria.memoria["local"]["string"] 
+        contVBoolean = memoria.booleanLocal - memoria.memoria["local"]["boolean"] 
+        contTInt = memoria.intTemporal - memoria.memoria["temporal"]["int"]
+        contTFloat = memoria.floatTemporal - memoria.memoria["temporal"]["float"]
+        contTString = memoria.stringTemporal - memoria.memoria["temporal"]["string"]
+
         # print("Temporales utilizados: ", contTempInt, contTempFloat, contTempString, contTempBool) 
         cuadruplos.addCuadruplo("ENDFUNC", None, None, None)
         funcName = pContexto.pop()
         function = funcDirectory.getFunction(funcName)
         function.variables = tablaDeVariables.variables
+        function.intTemp = contTInt
+        function.floatTemp = contTFloat
+        function.stringTemp = contTString
+        function.booleanTemp = contTString
+        function.intVar = contVInt
+        function.floatVar = contVFloat
+        function.stringVar = contVString
+        function.booleanVar = contVBoolean
         funcDirectory.updateFunction(function)
         tablaDeVariables.resetTable()
+        global contVariablesTemporales, contTempInt, contIntVars, contInt, contFloatVars, contFloat, contBoolVars, contBool, contStringVars, contString, contTempFloat, contTempChar, contTempBool, contTempString
+        contVariablesTemporales = 1
+        memoria.intLocal = memoria.memoria["local"]["int"]
+        memoria.floatLocal = memoria.memoria["local"]["float"]
+        memoria.stringLocal = memoria.memoria["local"]["string"]
+        memoria.booleanLocal = memoria.memoria["local"]["boolean"]
+        memoria.intTemporal = memoria.memoria["temporal"]["int"]
+        memoria.floatTemporal = memoria.memoria["temporal"]["float"]
+        memoria.stringTemporal = memoria.memoria["temporal"]["string"]
+        memoria.booleanTemporal = memoria.memoria["temporal"]["boolean"]
+        contTempInt = 0
+        contTempFloat = 0
+        contTempString = 0
+        contTempBool = 0
+        contIntVars = 0
+        contFloatVars = 0
+        contStringVars = 0
+        contBoolVars = 0
+        # print("End Funcion",pOp, pType)
         # print(function)
         # print(tablaDeVariables)
 
@@ -386,9 +544,11 @@ class NeuralPoints(Visitor):
         global pVars
         funcID = tree.children[0].value
         pVars.append(funcID)
+        # print("Lamada Funcion",funcID,pOp, pType)
 
     def np_func_vars(self, tree):
         global pVars
+        # print("Func Vars",pVars, pType)
         funcName = pVars.pop()
         funcVars = []
         for i in range(len(pOp)):
@@ -396,6 +556,7 @@ class NeuralPoints(Visitor):
         #Get function
         funcVars.reverse()
         function = funcDirectory.getFunction(funcName)
+        # print("Func Vars end",pVars, pType)
         
         if len(funcVars) != len(function.params):
             print("Error: Numero de parametros incorrecto, se esperaban " + str(len(function.params)) + " parametros y se recibieron " + str(len(funcVars)))
@@ -408,13 +569,60 @@ class NeuralPoints(Visitor):
                 print("Error: Tipo de parametro incorrecto, se esperaba " + function.params[i][1] + " y se recibio " + funcVars[i][1])
                 exit()
             exist = tablaDeVariables.getVariable(funcVars[i][0])
+            # print("function sub", function.type)
+            varDir = function.variables[function.params[i][0]].dirV
             if exist != None:
-                cuadruplos.addCuadruplo("PARAM", exist.dirV, None, function.params[i][0])
+                cuadruplos.addCuadruplo("PARAM", exist.dirV, None, varDir)
             else:
-                cuadruplos.addCuadruplo("PARAM", funcVars[i][0], None, function.params[i][0])
+                cuadruplos.addCuadruplo("PARAM", funcVars[i][0], None, varDir)
         cuadruplos.addCuadruplo("GOSUB", None, None, function.dirV)
+        if function.type != "void":
+            global contTempInt, contTempFloat, contTempString, contTempBool
+            dirGlobal = tablaDeVariables.getVariableGlobal(function.name).dirV
+            temp = -1
+            if function.type == "int":
+                temp = memoria.intTemporal
+                memoria.intTemporal += 1
+                contTempInt += 1
+                pType.append("int")
+            elif function.type == "float":
+                temp = memoria.floatTemporal
+                memoria.floatTemporal += 1
+                contTempFloat += 1
+                pType.append("float")
+            elif function.type == "string":
+                temp = memoria.stringTemporal
+                memoria.stringTemporal += 1
+                contTempString += 1
+                pType.append("string")
+            elif function.type == "boolean":
+                temp = memoria.booleanTemporal
+                memoria.booleanTemporal += 1
+                contTempBool += 1
+                pType.append("boolean")
+            # print("Dir Global", dirGlobal, temp)
+            cuadruplos.addCuadruplo("=", dirGlobal, None, temp)
+            pOp.append(temp)
 
 
+
+    #! Funciones para escritura
+    # def escritura(self, tree):
+    #     pSaltos.append(cuadruplos.contador)
+    #     cuadruplos.addCuadruplo("PRINT", None, None, "N/A")
+    
+    def np_escritura(self, tree):
+        # print("print",pOp,pType)
+        value = pOp.pop()
+        pType.pop()
+        exist = tablaDeVariables.getVariable(value)
+        dirV = -1
+        if exist != None:
+            dirV = exist.dirV
+        else:
+            dirV = value
+        cuadruplos.addCuadruplo("PRINT", None, None, dirV)
+        # print("print final",pOp,pType)
 
     #! Funciones para operaciones aritmeticas
 
@@ -456,12 +664,19 @@ class NeuralPoints(Visitor):
             contTempBool += 1
             pOp.append(temp)
             pType.append(result_type)
-            if pFor != []: #Si hay un for entonces añadirlos cuadruplos de igual a VF y comparacion de VC y VF
+            if pFor != []: #Si hay un for entonces añadir los cuadruplos de igual a VF y comparacion de VC y VF
+                global contTempInt, contIntVars
                 pFor.pop()
-                cuadruplos.addCuadruplo("=", right_operand, None, "VF")
+                global contFor
+                dirV = memoria.intLocal
+                memoria.intLocal += 1
+                tablaDeVariables.addVariable(Variable("VF" + str(contFor-1), "int", "N/A", dirV))
+                cuadruplos.addCuadruplo("=", right_operand, None, dirV)
+                contIntVars += 1
                 pSaltos.append(cuadruplos.contador)
-                temp = memoria.intTemporal
-                cuadruplos.addCuadruplo("<", "VC", "VF",temp)
+                temp = memoria.booleanTemporal
+                dirVC = tablaDeVariables.getVariable("VC" + str(contFor-1)).dirV
+                cuadruplos.addCuadruplo("<", dirVC, dirV,temp)
                 contVariablesTemporales += 1
                 memoria.intTemporal += 1
                 pSaltos.append(cuadruplos.contador)
@@ -549,6 +764,7 @@ class NeuralPoints(Visitor):
                 contVariablesTemporales += 1
                 pOp.append(temp)
                 pType.append(result_type)
+                # print("Cuad * /",pOp,pType)
 
 
     #! Funciones para guardar en pila de operandos y tipos
@@ -557,11 +773,15 @@ class NeuralPoints(Visitor):
         varName = tree.children[0].value
         var = tablaDeVariables.getVariable(varName)
         if var == None:
+            # print(varName)
+            # print(tablaDeVariables)
             print("Error: Variable no declarada")
             exit()
+            
         pOp.append(varName)
         pType.append(var.type)
         pIsVar.append(True)
+        # print("Guardar ID",pOp,pType)
 
         #TODO: Guardar el valor en la memoria de constantes
 
@@ -643,9 +863,12 @@ class NeuralPoints(Visitor):
 
     #* Funcion para asignar el valor a una variable
     def np_asignacion(self, tree):
+        
+        # print("Asignacion",pOp,pVars,pType)
         varValue = pOp.pop() # Obtener el valor de la pila de operandos
         varName = pVars.pop() # Obtener el nombre de la variable
         varType = pType.pop() # Obtener el tipo de la variable #TODO: Verificar que el tipo de la variable sea el mismo que el tipo del valor
+        # print("Asignacion final",pOp,pType)
         var = tablaDeVariables.getVariable(varName)
         valueDir = -1
         if var.type != varType:
@@ -709,3 +932,4 @@ class NeuralPoints(Visitor):
         # print(tablaDeConstantes)
         cuadruplos.writeCuadruplos()
         tablaDeConstantes.writeTable()
+ 

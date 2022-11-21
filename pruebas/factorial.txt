@@ -1,0 +1,30 @@
+
+
+function factorial(n:int): int {
+    var factorialRes: int;
+    factorialRes = 1;
+    
+    for(i = 1; i++; i < n+1) {
+        factorialRes = factorialRes * i;
+    }
+    print(factorialRes);
+    return factorialRes;
+}
+
+function suma(a:int,b:int): int {
+    var sumaRes: int;
+    sumaRes = a + b;
+    return sumaRes;
+}
+
+
+
+main(){
+    var result : int;
+    var result2 : int;
+    result = factorial(5);
+    print("result", result);
+    result2 = suma(5,6) + result;
+    print("result2", result2);
+
+}

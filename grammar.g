@@ -107,7 +107,8 @@ explista: COMA expresion explista |
 escritura: PRINT PARENTESIS_I escriturax PARENTESIS_D PUNTOYCOMA
 //escriturax: expresion escrituray  | STRING escrituray
 escriturax: expresion escrituray  
-escrituray: COMA escriturax |
+escrituray:  np_escritura COMA escriturax | np_escritura
+np_escritura:
 
 read: INPUT PARENTESIS_I ID PARENTESIS_D PUNTOYCOMA
 
@@ -161,7 +162,7 @@ factor: PARENTESIS_I expresion PARENTESIS_D | factorx varcte | varcte
 factorx: SUMA | RESTA
 
 
-varcte: boolean | id  | int | llamadafunc | CORCHETE_I exp CORCHETE_D | float | string | arreglo
+varcte: llamadafunc | boolean | id  | int  | CORCHETE_I exp CORCHETE_D | float | string | arreglo
 id: ID -> guardar_id
 int: INT ->  guardar_int
 float: FLOAT -> guardar_float

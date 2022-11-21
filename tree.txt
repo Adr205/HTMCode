@@ -1,5 +1,43 @@
 start
   globales
+    varglobales
+      simpleglobal
+        declare
+        x
+        :
+        tipo	int
+        =
+        expresion
+          exp
+            termino
+              factor
+                varcte
+                  guardar_int	456
+              terminox
+            expx
+          expresionx
+        ;
+        np_asignacion
+    globales
+      varglobales
+        simpleglobal
+          declare
+          y
+          :
+          tipo	int
+          =
+          expresion
+            exp
+              termino
+                factor
+                  varcte
+                    guardar_int	666
+                terminox
+              expx
+            expresionx
+          ;
+          np_asignacion
+      globales
   main
     main
     np_main
@@ -10,53 +48,53 @@ start
       bloq
         declaracion
           simple
-            simpledeclaracion
+            simpleasignacion
               var
-              result
+              suma
               np_is_var_false
               :
               tipo	int
+              =
+              expresion
+                exp
+                  termino
+                    factor
+                      varcte
+                        guardar_id	x
+                    terminox
+                  expx
+                    expy	+
+                    exp
+                      termino
+                        factor
+                          varcte
+                            guardar_id	y
+                        terminox
+                      expx
+                    cuadruplo_sr
+                expresionx
               ;
+              np_asignacion_2
       bloqx
         bloq
           estatuto
-            asignacion
-              asignacionsimple
-                result
-                =
+            escritura
+              print
+              (
+              escriturax
                 expresion
                   exp
                     termino
                       factor
                         varcte
-                          llamadafunc
-                            suma
-                            (
-                            voidvars
-                              exp
-                                termino
-                                  factor
-                                    varcte
-                                      guardar_int	5
-                                  terminox
-                                expx
-                              vvars
-                                ,
-                                exp
-                                  termino
-                                    factor
-                                      varcte
-                                        guardar_int	6
-                                    terminox
-                                  expx
-                                vvars
-                            np_func_vars
-                            )
+                          guardar_id	suma
                       terminox
                     expx
                   expresionx
-                ;
-                np_asignacion
+                escrituray
+                  np_escritura
+              )
+              ;
         bloqx
       }
     end

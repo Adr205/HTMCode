@@ -112,18 +112,28 @@ def saveMemory():
     memorias.append(memoriaVirtual.copy())
     memoriaVirtual.clear()
 
+def findMain():
+    global cuadPointer
+    for cuadruplo in cuadruplos:
+        if cuadruplo[0] == 'GOTO-MAIN':
+            cuadPointer = cuadruplo[3]
+            break
 
 def htmlCode():
     global cuadPointer, memoriaVirtual, goBack
-    
     operator = cuadruplos[cuadPointer][0]
+    first = False
     while operator != 'END':
+        # print(cuadPointer)
         operator = cuadruplos[cuadPointer][0]
         left = cuadruplos[cuadPointer][1]
         right = cuadruplos[cuadPointer][2]
         result = cuadruplos[cuadPointer][3]
-        
-        if operator == 'GOTO-MAIN':
+
+        if operator != '=' and first != True :
+            first = True
+            findMain()
+        elif operator == 'GOTO-MAIN':
             fillMemory("main")
             cuadPointer = int(result)
         elif operator == 'ERA':
@@ -154,7 +164,12 @@ def htmlCode():
                     left = val
                 elif type == 'boolean':
                     left = val
+            elif left >= 1000 and left < 9000:
+                var = tablaDeVariables.getVariableGlobalID(left)
+                left = var.value
             else:
+                # print(memoriaVirtual)
+                # print(left)
                 left = memoriaVirtual[left]
             if right >= 20000 and right < 29000:
                 val,type = tablaConst[right]
@@ -166,6 +181,9 @@ def htmlCode():
                     right = val
                 elif type == 'boolean':
                     right = val
+            elif right >= 1000 and right < 9000:
+                var = tablaDeVariables.getVariableGlobalID(right)
+                right = var.value
             else:
                 right = memoriaVirtual[right]
             memoriaVirtual[result] = left + right
@@ -254,21 +272,43 @@ def htmlCode():
             cuadPointer += 1
 
         elif operator == '=':
-            if left >= 20000 and left < 29000:
-                val,type = tablaConst[left]
-                if type == 'int':
-                    left = int(val)
-                elif type == 'float':
-                    left = float(val)
-                elif type == 'string':
-                    left = val
-                elif type == 'boolean':
-                    left = val
-            elif left >= 1000 and left < 9000:
-                left = tablaGlobal[left]
+            if result >= 1000 and result < 9000:
+                if left >= 20000 and left < 29000:
+                    val,type = tablaConst[left]
+                    if type == 'int':
+                        left = int(val)
+                    elif type == 'float':
+                        left = float(val)
+                    elif type == 'string':
+                        left = val
+                    elif type == 'boolean':
+                        left = val
+                elif left >= 1000 and left < 9000:
+                    left = tablaGlobal[left]
+                else:
+                    left = memoriaVirtual[left]
+                
+                var = tablaDeVariables.getVariableGlobalID(result)
+                var.value = left
+                tablaDeVariables.updateVariableGlobal(var)
+                
             else:
-                left = memoriaVirtual[left]
-            memoriaVirtual[result] = left
+                if left >= 20000 and left < 29000:
+                    val,type = tablaConst[left]
+                    if type == 'int':
+                        left = int(val)
+                    elif type == 'float':
+                        left = float(val)
+                    elif type == 'string':
+                        left = val
+                    elif type == 'boolean':
+                        left = val
+                elif left >= 1000 and left < 9000:
+                    left = tablaGlobal[left]
+                else:
+                    left = memoriaVirtual[left]
+
+                memoriaVirtual[result] = left
             cuadPointer += 1
         elif operator == '++':
             # ['++', 10003, 1, 30004]
@@ -388,6 +428,11 @@ def htmlCode():
                     result = val
                 elif type == 'boolean':
                     result = val
+            elif result >= 1000 and result < 9000:
+                # tablaDeVariables.printGlobales()
+                var = tablaDeVariables.getVariableGlobalID(result)
+                result = var.value
+                # result = 99
             else:
                 result = memoriaVirtual[result]
             print(result)
@@ -407,6 +452,7 @@ def htmlCode():
                 result = memoriaVirtual[result]
             tablaGlobal[left] = result
             cuadPointer += 1
+        
 
 
             

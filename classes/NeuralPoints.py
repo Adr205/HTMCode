@@ -65,10 +65,11 @@ contBoolVars = 0 # * contador de variables de tipo bool
 class NeuralPoints(Visitor):
 
     def start(self, tree):
-        pSaltos.append(cuadruplos.contador)
-        cuadruplos.addCuadruplo("GOTO-MAIN", None, None, "N/A")
+        x=0
 
     def np_main(self, tree):
+        pSaltos.append(cuadruplos.contador)
+        cuadruplos.addCuadruplo("GOTO-MAIN", None, None, "N/A")
         cuadruplos.fillCuadruplo(pSaltos.pop(), cuadruplos.contador)
         #* Resetear el valor de las variables locales
         global contVariablesTemporales, contTempInt, contTempFloat, contTempString, contTempBool, contIntVars, contFloatVars, contStringVars, contBoolVars

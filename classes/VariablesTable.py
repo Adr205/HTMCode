@@ -54,6 +54,12 @@ class VariablesTable:
         else:
             return None
 
+    def getVariableGlobalID(self, id):
+        for var in self.globales:
+            if self.globales[var].dirV == id:
+                return self.globales[var]
+        return None
+
     def printTable(self):
         for var in self.variables:
             var.printVariable()

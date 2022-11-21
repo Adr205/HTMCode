@@ -1,6 +1,3 @@
-
-
 main(){
-    var result : int;
-    result = suma(5,6);
+    
 }

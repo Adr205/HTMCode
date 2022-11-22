@@ -1,3 +1,71 @@
+
+function newPages(page:string, text:string): void{
+    newPage(page);
+    newHeader(page,1,"Hola soy: ");
+    newLabel(page, "Pagina de inicio");
+    startDiv(page);
+    newHeader(page,2,"Esto es una lista UL");
+        newUl(page);
+            newLi(page);
+                newP(page, text);
+            endLi(page);
+            newLi(page);
+                newP(page, "Bienvenido");
+            endLi(page);
+            newLi(page);
+                newA(page,"Google");
+            endLi(page);
+        endUl(page);
+    endDiv(page);
+
+    startDiv(page);
+    newHeader(page,3,"Esta es una lista OL ");
+        newOl(page);
+            newLi(page);
+                newI(page, "Bienvenido");
+            endLi(page);
+            newLi(page);
+                newB(page, "Bienvenido");
+            endLi(page);
+        endOl(page);
+    endDiv(page);
+
+    newHeader(page,4,"Esto es un input");
+    newInput(page, "text" , text);
+    newInput(page, "tel" , text);
+    newInput(page, "email" , text);    
+
+    newHeader(page,5,"Esto es un boton");
+    newButton(page, "Entrar");
+
+    newHeader(page,6,"Esto es una tabla");
+    startTable(page);
+        startTr(page);
+            newTh(page, "Nombre");
+            newTh(page, "Apellido");
+            newTh(page, "Edad");
+        endTr(page);
+        startTr(page);
+            newTd(page, "Juan");
+            newTd(page, "Perez");
+            newTd(page, "25");
+        endTr(page);
+        startTr(page);
+            newTd(page, "Maria");
+            newTd(page, "Chavez");
+            newTd(page, "19");
+        endTr(page);
+    endTable(page);
+    
+    endBody(page);
+    endPage(page);
+}
+
 main(){
     
+    var page: string = "Home";
+    var text: string = "Welcome";
+    newPages(page, text);
+    newPages("About", text);
+
 }

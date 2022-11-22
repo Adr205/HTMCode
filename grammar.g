@@ -99,14 +99,14 @@ asignacionsimple: ID IGUAL expresion PUNTOYCOMA np_asignacion
 np_asignacion:
 //np_var:
 
-asignacioncompleja: ID CORCHETE_I INT CORCHETE_D IGUAL expresion PUNTOYCOMA | asignacionlista
+asignacioncompleja: ID CORCHETE_I INT CORCHETE_D IGUAL expresion PUNTOYCOMA np_asignacion | ID CORCHETE_I ID CORCHETE_D IGUAL expresion PUNTOYCOMA np_asignacion | asignacionlista
 asignacionlista: ID IGUAL expresionlista PUNTOYCOMA
 expresionlista: CORCHETE_I expresion explista CORCHETE_D
 explista: COMA expresion explista |
 
 escritura: PRINT PARENTESIS_I escriturax PARENTESIS_D PUNTOYCOMA
 //escriturax: expresion escrituray  | STRING escrituray
-escriturax: expresion escrituray  
+escriturax: ID CORCHETE_I INT CORCHETE_D escrituray | ID CORCHETE_I ID CORCHETE_D escrituray | expresion escrituray
 escrituray:  np_escritura COMA escriturax | np_escritura
 np_escritura:
 
@@ -162,7 +162,7 @@ factor: PARENTESIS_I expresion PARENTESIS_D | factorx varcte | varcte
 factorx: SUMA | RESTA
 
 
-varcte: llamadafunc | boolean | id  | int  | CORCHETE_I exp CORCHETE_D | float | string | arreglo
+varcte: llamadafunc | boolean | id  | int  | PARENTESIS_I exp PARENTESIS_D | float | string | arreglo
 id: ID -> guardar_id
 int: INT ->  guardar_int
 float: FLOAT -> guardar_float

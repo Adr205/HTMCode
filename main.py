@@ -3,7 +3,8 @@ from lark import Visitor
 from classes.NeuralPoints import NeuralPoints
 from classes.Semantic_cube import SemanticCube
 from htmcode import *
-test = 't-index.txt'
+# test = 't-index.txt'
+test = './pruebas/help.txt'
 parser = Lark(open("grammar.g", 'r').read()) 
 result = ''
 
@@ -40,3 +41,13 @@ if __name__ == '__main__':
     # x.append(2)
     # x.append(3)
     # print(x)
+
+'''
+Endbody, endPage, startDiv, endDiv
+Parrafos p,u,i,b,label
+Lista UL OL LI
+Button
+input
+Tablas start, end, tr, th, td
+BR
+'''

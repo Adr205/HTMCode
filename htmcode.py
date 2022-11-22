@@ -3,6 +3,8 @@ from classes.NeuralPoints import *
 from classes.Memoria import *
 from classes.FunctionDirectory import *
 from classes.VariablesTable import *
+from classes.specialFuncs import *
+import time 
 
 '''
     TODO:   Guardar variables globales a memoria virtual global
@@ -42,6 +44,8 @@ tablaGlobal = tablaDeVariables.globales
 cuadPointer = 0
 tablaVariable = []
 dirFunc = {}
+pContexto = ["global"]
+onFunc = False
 
 def readConstantes():
     c = open('constantes.txt', 'r')
@@ -119,12 +123,13 @@ def findMain():
             cuadPointer = cuadruplo[3]
             break
 
+
+
 def htmlCode():
-    global cuadPointer, memoriaVirtual, goBack
+    global cuadPointer, memoriaVirtual, goBack, onFunc
     operator = cuadruplos[cuadPointer][0]
     first = False
     while operator != 'END':
-        # print(cuadPointer)
         operator = cuadruplos[cuadPointer][0]
         left = cuadruplos[cuadPointer][1]
         right = cuadruplos[cuadPointer][2]
@@ -133,26 +138,43 @@ def htmlCode():
         if operator != '=' and first != True :
             first = True
             findMain()
+            fillMemory('main')
         elif operator == 'GOTO-MAIN':
             fillMemory("main")
             cuadPointer = int(result)
         elif operator == 'ERA':
             saveMemory()
             fillMemory(result)
+            pContexto.append(result)
             cuadPointer += 1
         elif operator == 'PARAM':
             if left in tablaConst:
                 memoriaVirtual[result] = tablaConst[left][0]
             else:
-                
                 memoriaVirtual[result] = memorias[len(memorias)-1][left]
             cuadPointer += 1
         elif operator == 'GOSUB':
-            goBack.append(cuadPointer + 1)
-            cuadPointer = int(result)
+            
+            if result != "special":
+                goBack.append(cuadPointer + 1)
+                cuadPointer = int(result)
+            else:
+                if onFunc == False:
+                    goBack.append(cuadPointer + 1)
+                    specialFuncs(pContexto[-1])
+                    onFunc = True
+                else:
+                    #delay 1 second
+                    # time.sleep(0.1)
+                    cuadPointer = goBack.pop()
+                    memoriaVirtual = memorias.pop()
+                    onFunc = False
+                    pass
+            
         elif operator == 'ENDFUNC':
             cuadPointer = goBack.pop()
             memoriaVirtual = memorias.pop()
+            pContexto.pop()
         elif operator == '+':
             if left >= 20000 and left < 29000:
                 val,type = tablaConst[left]
@@ -338,6 +360,36 @@ def htmlCode():
                 right = memoriaVirtual[right]
             memoriaVirtual[result] = left + right
             cuadPointer += 1
+        elif operator == '==':
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                left = memoriaVirtual[left]
+            if right >= 20000 and right < 29000:
+                val,type = tablaConst[right]
+                if type == 'int':
+                    right = int(val)
+                elif type == 'float':
+                    right = float(val)
+                elif type == 'string':
+                    right = val
+                elif type == 'boolean':
+                    right = val
+            else:
+                right = memoriaVirtual[right]
+            if left == right:
+                memoriaVirtual[result] = True
+            else:
+                memoriaVirtual[result] = False
+            cuadPointer += 1
         elif operator == '<':
             if left >= 20000 and left < 29000:
                 val,type = tablaConst[left]
@@ -452,15 +504,10 @@ def htmlCode():
                 result = memoriaVirtual[result]
             tablaGlobal[left] = result
             cuadPointer += 1
-        
 
-
-            
         
 def suma(left,right):
     return left + right
-
-    
 
 
 def virtualMachine():
@@ -472,4 +519,84 @@ def virtualMachine():
 
     readConstantes()
     readCuadruplos()
+    createRepository()
     htmlCode()
+
+
+
+def specialFuncs(funcName):
+    global onFunc, cuadPointer
+    if funcName == 'newPage':
+        # print(memoriaVirtual[15000])
+        newPage(memoriaVirtual[15000])
+    elif funcName == 'endPage':
+        endPage(memoriaVirtual[15000])
+    elif funcName == 'endBody':
+        endBody(memoriaVirtual[15000])
+    elif funcName == 'startDiv':
+        startDiv(memoriaVirtual[15000])
+    elif funcName == 'endDiv':
+        endDiv(memoriaVirtual[15000])
+    elif funcName == 'newUl':
+        newUl(memoriaVirtual[15000])
+    elif funcName == 'endUl':
+        endUl(memoriaVirtual[15000])
+    elif funcName == 'newLi':
+        newLi(memoriaVirtual[15000])
+    elif funcName == 'endLi':
+        endLi(memoriaVirtual[15000])
+    elif funcName == 'newOl':
+        newOl(memoriaVirtual[15000])
+    elif funcName == 'endOl':
+        endOl(memoriaVirtual[15000])
+    elif funcName == 'newBr':
+        newBr(memoriaVirtual[15000])
+    elif funcName == 'startTable':
+        startTable(memoriaVirtual[15000])
+    elif funcName == 'endTable':
+        endTable(memoriaVirtual[15000])
+    elif funcName == 'startTr':
+        startTr(memoriaVirtual[15000])
+    elif funcName == 'endTr':
+        endTr(memoriaVirtual[15000])
+    elif funcName == 'startForm':
+        startForm(memoriaVirtual[15000])
+    elif funcName == 'endForm':
+        endForm(memoriaVirtual[15000])
+    elif funcName == 'startNav':
+        startNav(memoriaVirtual[15000])
+    elif funcName == 'endNav':
+        endNav(memoriaVirtual[15000])
+    elif funcName == 'newTh':
+        newTh(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newTd':
+        newTd(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newP':
+        newP(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newLabel':
+        newLabel(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newB':
+        newB(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newI':
+        newI(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newU':
+        newU(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newButton':
+        newButton(memoriaVirtual[15000], memoriaVirtual[15001])
+    elif funcName == 'newA':
+        newA(memoriaVirtual[15000], memoriaVirtual[15001], memoriaVirtual[15002])
+    elif funcName == 'newHeader':
+        newHeader(memoriaVirtual[15000], memoriaVirtual[10000], memoriaVirtual[15001])
+    elif funcName == 'newInput':
+        newInput(memoriaVirtual[15000], memoriaVirtual[15001], memoriaVirtual[15002])
+    elif funcName == 'newImg':
+        newImg(memoriaVirtual[15000], memoriaVirtual[15001])
+
+    
+    
+
+# def newPage(page):
+
+#     print("page", page)
+#     cuadPointer = goBack.pop()
+#     onFunc = False

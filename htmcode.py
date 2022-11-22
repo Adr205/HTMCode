@@ -469,6 +469,24 @@ def htmlCode():
                 cuadPointer += 1
         elif operator == 'GOTO':
             cuadPointer = result
+        elif operator == 'READ':
+            if result >= 1000 and result < 9000:
+                var = tablaDeVariables.getVariableGlobalID(result)
+                var.value = input( )
+                tablaDeVariables.updateVariableGlobal(var)
+            else:
+                if result >= 10000 and result < 13000:
+                    memoriaVirtual[result] = int(input( ))
+                elif result >= 13000 and result < 15000:
+                    memoriaVirtual[result] = float(input( ))
+                elif result >= 15000 and result < 17000:
+                    memoriaVirtual[result] = input( )
+                elif result >= 17000 and result < 19000:
+                    if input( ) == 'True':
+                        memoriaVirtual[result] = True
+                    else:
+                        memoriaVirtual[result] = False
+            cuadPointer += 1
         elif operator == 'PRINT':
             if result >= 20000 and result < 29000:
                 val,type = tablaConst[result]
@@ -567,6 +585,8 @@ def specialFuncs(funcName):
         startNav(memoriaVirtual[15000])
     elif funcName == 'endNav':
         endNav(memoriaVirtual[15000])
+    elif funcName == 'newTextArea':
+        newTextArea(memoriaVirtual[15000])
     elif funcName == 'newTh':
         newTh(memoriaVirtual[15000], memoriaVirtual[15001])
     elif funcName == 'newTd':

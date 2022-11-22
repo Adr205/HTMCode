@@ -10,7 +10,7 @@
 		<p>HTMCODE es un lenguaje de programacion enfocado en la maquetacion de paginas web</p>
 		<p>Estando enfocado principalmente en la maquetacion de HTML y dejando todo listo para que</p>
 		<p>El usuario solo tenga que preocuparse de la parte de programacion y estilos de la pagina</p>
-		<h4>Todos los resultados se guardan en una carpeta que se crea llamda 'Website'</h4>
+		<h4>Todos los resultados se guardan en una carpeta que se crea llamada 'Website'</h4>
 		<h1>La funcion primoridial de este programa es newPage(nombre de la pagina) ya que esta es la que crea el directorio de la pagina y su archivo css y js.</h1>
 		<h2>Y es por eso que en todas las funciones es necesario poner el nombre de la pagina como primer parametro ya que es a esa pagina donde se le insertaran los cambios.</h2>
 		<br>
@@ -26,8 +26,8 @@
 		<p>Este tipo de enlaces muchas veces se usar en la navegacion</p>
 		<p>Un ejemplo de navegacion con hiperenlaces se veria asi:</p>
 	<nav>
-			<a href="../Home/index.html">Home</a>
-		<a href="../About/index.html">About</a>
+		<a href="../Home/index.html">Home</a>
+	<a href="../About/index.html">About</a>
 		<a href="https://www.google.com"target="_blank" >Google</a>
 	</nav>
 		<p>En este caso solo los enlaces de About y Google mandan a la direccion correcta ya que no existe un archivo de Home en el Proyecto pero si este se creara en un momento despues del proyecto entonces la direccion funcionaria</p>
@@ -53,7 +53,7 @@
 		<h2>Imagenes</h2>
 		<p>Para insertar una imagen se usa la funcion llamada newImg y se le pasa como parametro el link de la imagen</p>
 		<p>Una foto se mostraria asi:</p>
-		<img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" style="width:100px" >
+	<img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" style="width:100px" >
 		<h2>Listas</h2>
 		<p>HTMCODE cuenta con los 2 tipos de listas usados en HTML los cuales son UL y OL con su respectivo elemento interno LI y para llamarlos se usa el mismo metodo que con los parrafos</p>
 		<p>Esto es una lista UL</p>
@@ -94,7 +94,11 @@
 		<input type="password" id="password">
 		<p>Esto es un input de tipo email</p>
 		<input type="email" id="email">
-		<p>Y tambien se cuenta con los siguientes tipos de inputs</p>
+		<p>Tambien existe el tag de textarea el cual solo se llama con la funcion newTextArea</p>
+		<p>Este tiene los valores predeterminados de 4 filas y 50 columnas</p>
+		<textarea rows="4" cols="50">
+		</textarea>
+			<p>Y tambien se cuenta con los siguientes tipos de inputs</p>
 	<ul>
 			<li>
 				<p>button</p>

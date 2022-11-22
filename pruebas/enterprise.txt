@@ -1,0 +1,279 @@
+
+function createLogin(): void{
+    var page: string = "Login";
+    var text: string;
+    
+    newPage(page);
+
+    newImg(page,"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png");
+    newHeader(page,1,"Login");
+
+    startDiv(page);
+        startForm(page);
+        startDiv(page);
+                newLabel(page,"Username");
+                text = "text";
+                newInput(page,text,"username");
+        endDiv(page);
+        startDiv(page);
+                newLabel(page,"Password");
+                text = "password";
+                newInput(page,text,"password");
+        endDiv(page);
+        text = "Home";
+        newA(page,text,"Login");
+        endForm(page);
+        newLabel(page,"Aun no tienes cuenta?");
+        text = "Register";
+        newA(page,text,"Registrate");
+    endDiv(page);
+    endBody(page);
+    endPage(page);
+}
+
+function createRegister(): void{
+    var page: string = "Register";
+    var text: string;
+    newPage(page);
+
+    newImg(page,"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png");
+    newHeader(page,1,"Registrate");
+
+    startDiv(page);
+        startForm(page);
+        startDiv(page);
+                newLabel(page,"Username");
+                text = "text";
+                newInput(page,text,"username");
+        endDiv(page);
+        startDiv(page);
+                newLabel(page,"Password");
+                text = "password";
+                newInput(page,text,"password");
+        endDiv(page);
+        newButton(page,"Register");
+        endForm(page);
+        newLabel(page,"Ya tienes cuenta?");
+        text = "Login";
+        newA(page,text,"Inicia sesion");
+    endDiv(page);
+    endBody(page);
+    endPage(page);
+}
+
+function createNavBar(page:string) : void{
+    var text: string;
+    text = "Home";
+    startNav(page);
+        newA(page,text,"Home");
+        text = "About";
+        newA(page,text,"About");
+        text = "Contact";
+        newA(page,text,"Contact");
+        text = "Login";
+        newA(page,text,"Logout");
+    endNav(page);
+}
+
+function createHome(): void{
+    var page: string = "Home";
+    var text: string;
+    newPage(page);
+    createNavBar(page);
+    newImg(page,"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png");
+    newHeader(page,1,"Bienvenido a Google!");
+    startDiv(page);
+        newHeader(page,2,"¿Que es Google?");
+        newP(page,"Google es una empresa multinacional estadounidense de servicios en línea y software con sede en Mountain View California. Fue fundada en 1998 por Larry Page y Sergey Brin mientras estudiaban en la Universidad de Stanford. En 2015 Google se convirtió en la empresa más valiosa del mundo con un valor de mercado de más de 700 mil millones de dólares.");
+        newHeader(page,2,"¿Que hace Google?");
+        newP(page,"Google ofrece una amplia gama de servicios y productos a través de sus sitios web que incluyen búsqueda publicidad en línea mapas software de oficina almacenamiento en la nube y análisis de datos de mercado. Muchos de estos servicios y productos se ofrecen gratuitamente a los usuarios y Google genera ingresos a través de la publicidad de pago por clic la venta de licencias de software y hardware y el suministro de servicios de TI a empresas.");
+    endDiv(page);
+    startDiv(page);
+        newHeader(page,2,"¿Quienes son los fundadores de Google?");
+        newP(page,"Larry Page y Sergey Brin son los fundadores de Google. Ambos son ingenieros de software y se conocieron en la Universidad de Stanford en 1995. En 1996 Page y Brin comenzaron a trabajar en un proyecto de búsqueda de información que se llamó BackRub. En 1998 Page y Brin dejaron sus trabajos en la empresa de software de Internet Excite y comenzaron a trabajar en Google.");
+    endDiv(page);
+    startDiv(page);
+        newHeader(page,2,"¿Cuando fue fundada Google?");
+        newP(page,"Google fue fundada en 1998 por Larry Page y Sergey Brin mientras estudiaban en la Universidad de Stanford. El nombre de Google proviene de un error tipográfico que hizo Page cuando buscaba la palabra googol que significa el número 1 seguido de cien ceros. El nombre de Google se originó de la palabra googol que significa el número 1 seguido de cien ceros.");
+    endDiv(page);
+    newLabel(page,"¿Quieres saber mas?");
+    text = "About";
+    newA(page,text,"Aprende mas sobre nosotros");
+    endBody(page);
+    endPage(page);
+}
+
+function createAbout(): void{
+    var page: string = "About";
+    var text: string;
+    newPage(page);
+    createNavBar(page);
+    newImg(page,"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png");
+    newHeader(page,1,"Sobre nosotros");
+
+    startDiv(page);
+        newHeader(page,2,"Proyectos");
+        newUl(page);
+            newLi(page);
+                newHeader(page,3,"Google Maps");
+                newImg(page,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Google_Maps_Logo_2020.svg/2275px-Google_Maps_Logo_2020.svg.png");
+                newP(page,"Google Maps es un servicio de mapas en línea proporcionado por Google que ofrece información sobre ubicaciones de negocios y lugares de interés en todo el mundo. Google Maps ofrece una vista de satélite de la Tierra en 3D y una vista de mapas de carreteras de 360 grados. Google Maps también ofrece una vista de mapas de carreteras de 360 grados. Google Maps también ofrece una vista de mapas de carreteras de 360 grados.");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Google Drive");
+                newImg(page,"https://i.blogs.es/404a76/drive1/840_560.jpg");
+                newP(page,"Google Drive es un servicio de almacenamiento en la nube de Google que permite a los usuarios almacenar y sincronizar archivos en línea y acceder a ellos desde cualquier dispositivo con una conexión a Internet. Google Drive ofrece 15 GB de almacenamiento gratuito y ofrece almacenamiento adicional por un costo. Google Drive ofrece 15 GB de almacenamiento gratuito y ofrece almacenamiento adicional por un costo.");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Google Docs");
+                newImg(page,"https://d500.epimg.net/cincodias/imagenes/2022/08/17/lifestyle/1660750035_359372_1660750097_sumario_normal.jpg");
+                newP(page,"Google Docs es una suite de oficina en línea de Google que incluye hojas de cálculo presentaciones y procesadores de texto. Google Docs permite a los usuarios crear y editar documentos en línea y compartirlos con otros usuarios. Google Docs permite a los usuarios crear y editar documentos en línea y compartirlos con otros usuarios.");
+            endLi(page);
+        endUl(page);
+    endDiv(page);
+
+    startDiv(page);
+        newHeader(page,2,"Desarrollo");
+        newUl(page);
+            newLi(page);
+                newHeader(page,3,"GOLANG");
+                newImg(page,"https://frontdeskhelpers.com/es/wp-content/uploads/sites/2/2021/10/golang-1024x578.png");
+                newP(page,"Go es un lenguaje de programación concurrente y compilado desarrollado por Google en el año 2007. Go es un lenguaje de programación concurrente y compilado desarrollado por Google en el año 2007. Go es un lenguaje de programación concurrente y compilado desarrollado por Google en el año 2007.");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"ANGULAR");
+                newImg(page,"https://angular.io/assets/images/logos/angular/angular.svg");
+                newP(page,"Angular es un framework de código abierto para aplicaciones web y móviles desarrollado por Google y por una comunidad de individuos y corporaciones. Angular es un framework de código abierto para aplicaciones web y móviles desarrollado por Google y por una comunidad de individuos y corporaciones. Angular es un framework de código abierto para aplicaciones web y móviles desarrollado por Google y por una comunidad de individuos y corporaciones.");
+            endLi(page);
+        endUl(page);
+    endDiv(page);
+
+    startDiv(page);
+        newHeader(page,2,"Nuestros empleados");
+        newP(page,"Nuestros empleados son los mejores en lo que hacen y son los que hacen que Google sea lo que es hoy en día.");
+        newP(page,"Y nuestra division por area actual es la siguiente:");
+        newUl(page);
+            newLi(page);
+                newHeader(page,3,"Desarrollo");
+                newP(page,"Nuestro equipo de desarrollo es el encargado de crear las aplicaciones que usamos todos los dias.");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Marketing");
+                newP(page,"Nuestro equipo de marketing es el encargado de hacer que nuestros productos sean conocidos por todo el mundo.");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Ventas");
+                newP(page,"Nuestro equipo de ventas es el encargado de vender nuestros productos a las empresas.");
+            endLi(page);
+
+            startTable(page);
+                startTr(page);
+                    newTh(page,"Area");
+                    newTh(page,"Hombres");
+                    newTh(page,"Mujeres");
+                endTr(page);
+                startTr(page);
+                    newTd(page,"Desarrollo");
+                    newTd(page,"100");
+                    newTd(page,"50");
+                endTr(page);
+                startTr(page);
+                    newTd(page,"Marketing");
+                    newTd(page,"23");
+                    newTd(page,"50");
+                endTr(page);
+                startTr(page);
+                    newTd(page,"Ventas");
+                    newTd(page,"65");
+                    newTd(page,"70");
+                endTr(page);
+            endTable(page);
+    endDiv(page);
+    endBody(page);
+    endPage(page);
+}
+
+function createContact(): void{
+    var page: string = "Contact";
+    var text: string;
+    newPage(page);
+    createNavBar(page);
+    newImg(page,"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png");
+    newHeader(page,1,"Contactanos");
+
+    startDiv(page);
+        newHeader(page,2,"Contacto");
+        newP(page,"Si quieres contactar con nosotros puedes hacerlo a traves de nuestro correo electronico o de nuestro telefono.");
+        newUl(page);
+            newLi(page);
+                newHeader(page,3,"Correo electronico");
+                newP(page," google_contact@mail.com");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Telefono");
+                newP(page," 915 234 5678");
+            endLi(page);
+        endUl(page);
+    endDiv(page);
+
+    startDiv(page);
+        newHeader(page,2,"Ubicacion");
+        newP(page,"Nuestra oficina se encuentra en la calle de la piruleta 23 Madrid.");
+    endDiv(page);
+
+    startDiv(page);
+        newHeader(page,2,"Formulario de contacto");
+        newP(page,"Si quieres contactar con nosotros puedes hacerlo a traves de nuestro correo electronico o de nuestro telefono.");
+        newUl(page);
+            newLi(page);
+                newHeader(page,3,"Nombre");
+                text = "text";
+                newInput(page,text,"nombre");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Correo electronico");
+                text = "email";
+                newInput(page,text,"email");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Telefono");
+                text = "tel";
+                newInput(page,text,"telefono");
+            endLi(page);
+            newLi(page);
+                newHeader(page,3,"Mensaje");
+                newTextArea(page);
+            endLi(page);
+        endUl(page);
+        newButton(page,"Enviar");
+
+    endBody(page);
+    endPage(page);
+}
+
+
+
+
+main(){
+
+    print("Crear pantalla de login");
+    createLogin();
+    print("Pantalla de Login creada");
+
+    print("Crear pantalla de registro");
+    createRegister();
+    print("Pantalla de registro creada");
+
+    print("Crear pantalla de home");
+    createHome();
+    print("Pantalla de home creada");
+
+    print("Crear pantalla de about");
+    createAbout();
+    print("Pantalla de about creada");
+
+    print("Crear pantalla de contact");
+    createContact();
+    print("Pantalla de contact creada");
+
+}

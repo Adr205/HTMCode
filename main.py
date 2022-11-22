@@ -43,11 +43,10 @@ if __name__ == '__main__':
     # print(x)
 
 '''
-Endbody, endPage, startDiv, endDiv
-Parrafos p,u,i,b,label
-Lista UL OL LI
-Button
-input
-Tablas start, end, tr, th, td
-BR
+Input
+navbar
+textarea
+
+Im a developer familiar with front and back, and i love to make websites and apps on ionic and MEAN stack
+
 '''

@@ -190,6 +190,13 @@ def endNav(page):
     f.write('\t</nav>\n')
     f.close()
 
+def newTextArea(page):
+    # append <textarea> to index.html
+    pathPage = pathWebsite + "/" + page
+    f = open(pathPage + "/index.html", "a")
+    f.write('\t\t<textarea rows="4" cols="50">\n\t\t</textarea>\n\t')
+    f.close()
+
 def newP(page,text):
     # append <p> to index.html
     pathPage = pathWebsite + "/" + page
@@ -240,14 +247,14 @@ def newA(page,src,text):
         f = open(pathPage + "/index.html", "a")
         capital= src[0].upper() + src[1:]
         # ../About/about.html
-        f.write('\t\t<a href="../' + capital + '/' + 'index.html">' + text + '</a>\n')
+        f.write('\t<a href="../' + capital + '/' + 'index.html">' + text + '</a>\n')
         f.close()
 
 def newImg(page,src):
     # append <img> to index.html
     pathPage = pathWebsite + "/" + page
     f = open(pathPage + "/index.html", "a")
-    f.write('\t\t<img src="' + src + '"' + ' style="width:100px" >\n')
+    f.write('\t<img src="' + src + '"' + ' style="width:100px" >\n')
     f.close()
 
 def newButton(page,text):

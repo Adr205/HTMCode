@@ -88,6 +88,7 @@ class NeuralPoints(Visitor):
         funcDirectory.addFunction(Function("endForm", "void", "special", params, vars, 0, 0,0,0,0,0,0,1))
         funcDirectory.addFunction(Function("startNav", "void", "special", params, vars, 0, 0,0,0,0,0,0,1))
         funcDirectory.addFunction(Function("endNav", "void", "special", params, vars, 0, 0,0,0,0,0,0,1))
+        funcDirectory.addFunction(Function("newTextArea", "void", "special", params, vars, 0, 0,0,0,0,0,0,1))
         params = [["page", "string"], ["text", "string"]]
         var = Variable("page", "string", "N/A", memoria.stringLocal, "local")
         var2 = Variable("text", "string", "N/A", memoria.stringLocal + 1, "local")
@@ -764,7 +765,15 @@ class NeuralPoints(Visitor):
             cuadruplos.addCuadruplo("=", dirGlobal, None, temp)
             pOp.append(temp)
 
-
+    #! Funciones para Read
+    def read(self,tree):
+        varID = tree.children[2].value
+        exist = tablaDeVariables.getVariable(varID)
+        if exist == None:
+            print("Error: Variable " + varID + " no declarada")
+            exit()
+        varType = exist.type
+        cuadruplos.addCuadruplo("READ", None, None, exist.dirV)
 
     #! Funciones para escritura
     def escritura(self, tree):
@@ -1143,9 +1152,9 @@ class NeuralPoints(Visitor):
         funcDirectory.updateFunction(funcMain)
 
         # print("pVars",pVars)
-        # print('pOper' , pOper)
-        # print('pOp' , pOp)
-        # print('pType' , pType)
+        print('pOper' , pOper)
+        print('pOp' , pOp)
+        print('pType' , pType)
         # print('pSaltos' , pSaltos)
         # print('pContadores' , pContadores)
         # print("\n------- Directorio de funciones -------")

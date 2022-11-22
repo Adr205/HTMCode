@@ -109,6 +109,9 @@ main(){
     text = "email";
     newP(page,"Esto es un input de tipo email");
     newInput(page,text,"email");
+    newP(page,"Tambien existe el tag de textarea el cual solo se llama con la funcion newTextArea");
+    newP(page,"Este tiene los valores predeterminados de 4 filas y 50 columnas");
+    newTextArea(page);
     newP(page, "Y tambien se cuenta con los siguientes tipos de inputs");
     newUl(page);
         newLi(page);

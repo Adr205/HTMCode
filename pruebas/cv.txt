@@ -1,0 +1,137 @@
+
+function createHeader(page:string,nombre:string, carrera:string): void{
+    newPage(page);
+    startDiv(page);
+        newHeader(page,1,nombre);
+        newHeader(page,2,carrera);
+    endDiv(page);
+}
+
+function createSummary(page:string,summary:string): void{
+    startDiv(page);
+        newHeader(page,3,"Personal Summary");
+        newP(page,summary);
+    endDiv(page);
+}
+
+function createCompetences(page:string): void{
+    var n: int;
+    var competence: string;
+    print("Ingresa la cantidad de competencias");
+    input(n);
+    
+    startDiv(page);
+        newHeader(page,3,"Key Competences");
+        newUl(page);
+            for(i = 0; i++; i < n){
+                input(competence);
+                newLi(page);
+                    newP(page,competence);
+                endLi(page);
+            }
+        endUl(page);
+    endDiv(page);
+}
+
+function createContact(page:string): void{
+    var contactDetail: string;
+    startDiv(page);
+        newHeader(page,3,"Contact Details");
+        print("Ingresa 3 formas de contacto");
+        for(i = 0; i++; i < 3){
+            input(contactDetail);
+            newP(page,contactDetail);
+        }
+    endDiv(page);
+}
+
+function createLanguages(page:string): void{
+    var n: int;
+    var language: string;
+    print("Ingresa la cantidad de idiomas");
+    input(n);
+    
+    startDiv(page);
+        newHeader(page,3,"Languages");
+        newUl(page);
+            for(i = 0; i++; i < n){
+                input(language);
+                newLi(page);
+                    newP(page,language);
+                endLi(page);
+            }
+        endUl(page);
+    endDiv(page);
+}
+
+function createExperience(page:string): void {
+    var n: int;
+    var company: string;
+    var years: string;
+    var description: string;
+    print("Ingresa la cantidad de experiencias");
+    input(n);
+
+    startDiv(page);
+        newHeader(page,3,"Experience");
+        for(i = 0; i++; i < n){
+            print("Ingresa el nombre de la empresa");
+            input(company);
+            print("Ingresa los años de experiencia");
+            input(years);
+            print("Ingresa una breve descripción de la experiencia");
+            input(description);
+            newHeader(page,4,company);
+            newP(page,years);
+            newP(page,description);
+        }
+    endDiv(page);
+}
+
+function createAcademic(page:string): void{
+    var n:int;
+    var school: string;
+    var graduationYear: string;
+    var description: string;
+    print("Ingresa la cantidad de estudios");
+    input(n);
+
+    startDiv(page);
+        newHeader(page,3,"Academic");
+        for(i = 0; i++; i < n){
+            print("Ingresa el nombre de la escuela");
+            input(school);
+            print("Ingresa el año de graduación");
+            input(graduationYear);
+            print("Ingresa una breve descripción de la experiencia");
+            input(description);
+            newHeader(page,4,school);
+            newP(page,graduationYear);
+            newP(page,description);
+        }
+    endDiv(page);
+    endBody(page);
+    endPage(page);
+}
+
+
+main(){
+    print("Este programa generara un CV");
+    var cv: string = "CV";
+    var nombre: string;
+    var carrera: string;
+    var summary: string;
+    print("Ingrese su nombre");
+    input(nombre);
+    print("Ingrese su carrera");
+    input(carrera);
+    createHeader(cv,nombre, carrera);
+    print("Ingrese su resumen personal");
+    input(summary);
+    createSummary(cv, summary);
+    createCompetences(cv);
+    createContact(cv);
+    createLanguages(cv);
+    createExperience(cv);
+    createAcademic(cv);
+}

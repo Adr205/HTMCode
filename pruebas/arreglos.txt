@@ -1,0 +1,29 @@
+
+
+main(){
+    var arrA[5]: int;
+    var arrB[5]: int;
+    var c:int;
+    arrA[0] = 1;
+    arrA[1] = 2;
+    arrA[2] = 3;
+    arrA[3] = 4;
+    arrA[4] = 5;
+
+    arrB[0] = 6;
+    arrB[1] = 7;
+    arrB[2] = 8;
+    arrB[3] = 9;
+    arrB[4] = 10;
+
+    print(arrA[0]);
+    print(arrB[1]);
+
+    c = arrA[0] + arrB[1];
+    print(c);
+    
+    arrA[4] = arrB[4];
+    print(arrA[4]);
+
+
+}

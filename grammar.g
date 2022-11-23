@@ -19,6 +19,9 @@ DECLARE: "declare"
 VOID: "void"
 TRUE: "true"
 FALSE: "false"
+AND: "and"
+OR: "or"
+NOT: "not"
 DOSPUNTOS : /:/
 PUNTOYCOMA: ";"
 COMA: ","
@@ -144,7 +147,7 @@ np_func_vars:
  
 expresion: exp expresionx
 expresionx: logicos exp np_logico_2 |
-logicos: MAYOR -> np_logico | MENOR -> np_logico | MENORIGUAL -> np_logico | MAYORIGUAL -> np_logico | ES_DIFERENTE  -> np_logico | ES_IGUAL -> np_logico
+logicos: MAYOR -> np_logico | MENOR -> np_logico | MENORIGUAL -> np_logico | MAYORIGUAL -> np_logico | ES_DIFERENTE  -> np_logico | ES_IGUAL -> np_logico | AND -> np_logico | OR -> np_logico | NOT -> np_logico
 np_logico:
 np_logico_2:
 

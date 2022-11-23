@@ -21,7 +21,6 @@ memoria = Memoria() #* Memoria
 pSaltos = []  # * pila de saltos 
 pOper = []  # * pila de operadores
 pOp = []  # * pila de operandos
-pMem = []  # * pila de memoria de operandos
 pType = []  # * pila de tipos
 pVars = []  # * pila de variables
 pFor = [] # * pila de for
@@ -191,15 +190,15 @@ class NeuralPoints(Visitor):
         x = 1  # TODO: Agregar todo lo del uso de arreglos como variables
 
     def arreglo(self, tree):
-        print("Arreglo", pOp, pType, pVars)
+        # print("Arreglo", pOp, pType, pVars)
         if len(pOp) < 1:
             try:
-                print(pOp, pType,pVars)
+                # print(pOp, pType,pVars)
                 arrIndex = int(tree.children[2].value)
-                print("ArrINDEX", arrIndex)
+                # print("ArrINDEX", arrIndex)
                 try:
                     arrVar = tablaDeVariables.getVariable(pVars[-1])
-                    print(arrVar)
+                    # print(arrVar)
                     pType.append(arrVar.type)
                     arrVar = pVars[-2]
                     pOp.append(arrVar + arrIndex)
@@ -217,7 +216,7 @@ class NeuralPoints(Visitor):
 
                 pOp.append(arrVar + arrIndex)
         else:
-            print("Es comparacion")
+            # print("Es comparacion")
             try:
                 arrIndex = int(tree.children[2].value)
                 arrVar =  tree.children[0].value
@@ -230,11 +229,11 @@ class NeuralPoints(Visitor):
                 arrIndex = tree.children[2].value
                 indexVar = tablaDeVariables.getVariable(arrIndex)
                 indexValue = indexVar.value
-                print("IndexValue", indexValue)
+                # print("IndexValue", indexValue)
                 if indexValue >= 20000 and indexValue < 29000:
                     indexValue = tablaDeConstantes.getConstante(indexValue)
                 
-                print("IndexValue", indexValue)
+                # print("IndexValue", indexValue)
                 arrVar =  tree.children[0].value
                 arrVar = tablaDeVariables.getVariable(arrVar)
                 arrDirV = arrVar.dirV
@@ -820,10 +819,10 @@ class NeuralPoints(Visitor):
                     pOp.append(dirV)
                     pType.append(var.type)
                 else:
-                    print(var.value)
+                    # print(var.value)
                     index = var.value
                     dirV = index
-                    print("Index", index)
+                    # print("Index", index)
                     varSize = int(var.size)
                     pOp.append(dirV)
                     pType.append(var.type)
@@ -864,7 +863,7 @@ class NeuralPoints(Visitor):
     #* Funcion para crear el cuadruplo logico
     def np_logico_2(self, tree):
         global contVariablesTemporales, contTempBool
-        print("Logico", pOp, pType, pOper)
+        # print("Logico", pOp, pType, pOper)
         if len(pOper) > 0:
             right_operand = pOp.pop()
             left_operand = pOp.pop()
@@ -1152,9 +1151,9 @@ class NeuralPoints(Visitor):
         funcDirectory.updateFunction(funcMain)
 
         # print("pVars",pVars)
-        print('pOper' , pOper)
-        print('pOp' , pOp)
-        print('pType' , pType)
+        # print('pOper' , pOper)
+        # print('pOp' , pOp)
+        # print('pType' , pType)
         # print('pSaltos' , pSaltos)
         # print('pContadores' , pContadores)
         # print("\n------- Directorio de funciones -------")

@@ -1,0 +1,24 @@
+main(){
+    var a: int;
+    var b: int;
+    var c: int;
+    var d: float;
+    var e: float;
+    var f: boolean;
+    var g: boolean;
+
+    a = 1 + 2 * 3 - 5 / 2;
+    print("A=:",a);
+    b = 45 * 2 - 54;
+    print("B=:",b);
+    c = a + b;
+    print("C=:",c);
+    d = 1.0 + 2.0 * 3.0 - 5.0 / 2.0;
+    print("D=:",d);
+    e = 45 + 2.0 - 54.0;
+    print("E=:",e);
+    f = true and false ;
+    print("F=:",f);
+    g = true or false;
+    print("G=:",g);
+}

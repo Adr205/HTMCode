@@ -321,6 +321,32 @@ class SemanticCube():
                     'string': 'error',
                     'boolean': 'boolean'
                 }
+            },
+            'not': {
+                'int': {
+                    'int': 'error',
+                    'float': 'error',
+                    'string': 'error',
+                    'boolean': 'error'
+                },
+                'float': {
+                    'int': 'error',
+                    'float': 'error',
+                    'string': 'error',
+                    'boolean': 'error'
+                },
+                'string': {
+                    'int': 'error',
+                    'float': 'error',
+                    'string': 'error',
+                    'boolean': 'error'
+                },
+                'boolean': {
+                    'int': 'error',
+                    'float': 'error',
+                    'string': 'error',
+                    'boolean': 'boolean'
+                }
             }
         }
 

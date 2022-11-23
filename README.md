@@ -2,6 +2,18 @@
 <h2> Documentos Importantes </h2>
 <h3> Propuesta </ h3>
 Documento de la [propuesta](https://docs.google.com/document/d/1rsTjxqTfrrDu48KNuJDZXyhhyCyiaCX2iZMKbtrCpEA/edit?usp=sharing).
+<h3> Demo </ h3>
+[demo](https://youtu.be/g9JrWNcM5tA).
+<h3> Documentacion </ h3>
+[documentación](https://docs.google.com/document/d/e/2PACX-1vQwxL22XCo_WyjRrsN4OBeYc6BKY_IS_VUBE9iB2TabcEBEJxFah6xPtrELNbEEJT-JlafdrST6EoFS/pub).
+
+
+<h2> Instalación </ h2>
+Primero instalar los requerimientos de python con el comando: pip install -r requirements.txt
+Luego ejecutar el archivo main.py con el comando: python main.py
+En ese comando lo primero que se correra va a ser el manual de usuario, por lo que si se corre el documento website/Help/index.html en el buscador se podra ver el manual de usuario.
+
+<h1> Avances </h1>
 
 
 <h2> Avance 2 </h2>

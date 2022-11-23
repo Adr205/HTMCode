@@ -587,6 +587,7 @@ class NeuralPoints(Visitor):
                 pOp.append(var.value)
                 funcVars +=1
 
+    #Funcion que se encarga de crear la funcion en el directorio de funciones y agregar sus variables
     def np_func_id(self,tree):
         global funcVars, contIntVars, contFloatVars, contStringVars, contBoolVars
         params = [] #Lista de parametros
@@ -701,7 +702,10 @@ class NeuralPoints(Visitor):
         funcID = tree.children[0].value
         pVars.append(funcID)
         # print("Lamada Funcion",funcID,pOp, pType)
-
+    
+    #* Funcion para agregar cuadruplos de llamada a funciones
+    #* Agrega el Era, los parametros y el GOSUB
+    #Y si es una funcion con resultado, agrega el parametro de retorno
     def np_func_vars(self, tree):
         global pVars
         # print("Func Vars",pVars, pType)

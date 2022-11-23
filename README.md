@@ -13,6 +13,10 @@ Primero instalar los requerimientos de python con el comando: pip install -r req
 Luego ejecutar el archivo main.py con el comando: python main.py
 En ese comando lo primero que se correra va a ser el manual de usuario, por lo que si se corre el documento website/Help/index.html en el buscador se podra ver el manual de usuario.
 
+<h2> Manual de usuario </h2>
+Para probar las distintas pruebas que se encuentran en el folder de pruebas se tiene que cambiar el valor de test en el main.py
+Si se elimina el manual de usuario, solo basta con volver a correr el help.txt para poder volver a verlo
+
 <h1> Avances </h1>
 
 

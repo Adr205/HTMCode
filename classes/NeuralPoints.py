@@ -55,6 +55,7 @@ contIntVars = 0 # * contador de variables de tipo int
 contFloatVars = 0 # * contador de variables de tipo float
 contStringVars = 0 # * contador de variables de tipo string
 contBoolVars = 0 # * contador de variables de tipo bool
+contPointers = 0 # * contador de apuntadores
 
 
 # TODO: Punto neuralgico Read
@@ -130,7 +131,7 @@ class NeuralPoints(Visitor):
         cuadruplos.addCuadruplo("GOTO-MAIN", None, None, "N/A")
         cuadruplos.fillCuadruplo(pSaltos.pop(), cuadruplos.contador)
         #* Resetear el valor de las variables locales
-        global contVariablesTemporales, contTempInt, contTempFloat, contTempString, contTempBool, contIntVars, contFloatVars, contStringVars, contBoolVars
+        global contVariablesTemporales, contTempInt, contTempFloat, contTempString, contTempBool, contIntVars, contFloatVars, contStringVars, contBoolVars,contPointers
         contVariablesTemporales = 1
         memoria.intLocal = memoria.memoria["local"]["int"]
         memoria.floatLocal = memoria.memoria["local"]["float"]
@@ -140,6 +141,7 @@ class NeuralPoints(Visitor):
         memoria.floatTemporal = memoria.memoria["temporal"]["float"]
         memoria.stringTemporal = memoria.memoria["temporal"]["string"]
         memoria.booleanTemporal = memoria.memoria["temporal"]["boolean"]
+        memoria.pointerTemporal = memoria.memoria["temporal"]["pointer"]
         contTempInt = 0
         contTempFloat = 0
         contTempString = 0
@@ -148,6 +150,7 @@ class NeuralPoints(Visitor):
         contFloatVars = 0
         contStringVars = 0
         contBoolVars = 0
+        contPointers = 0
         # func = Function(pOp.pop(), pType.pop(), cuadruplos.contador, params) # Crear funcion
         # funcDirectory.addFunction(func) # Agregar funcion al directorio de funciones
         funcMain = Function("main", "void", cuadruplos.contador, []) # Crear funcion
@@ -190,31 +193,85 @@ class NeuralPoints(Visitor):
         x = 1  # TODO: Agregar todo lo del uso de arreglos como variables
 
     def arreglo(self, tree):
-        # print("Arreglo", pOp, pType, pVars)
         if len(pOp) < 1:
+            global contInt, contPointers
+            arrID = tree.children[0].value
+            indexDirv = -1
+            arrDirv = -1
+            arrSizeDirv = -1
+            valueDirv = -1
+            indexR = -1
+            arrType = -1
+
+            arrDirv = tablaDeVariables.getVariable(arrID)
+
+            if arrDirv == None:
+                if arrDirV == None:
+                    print("Error: Variable " + arrID + " no declarada")
+                    exit()
+            arrType = arrDirv.type
+            arrSize = int(arrDirv.size)
+            arrSizeDirv = tablaDeConstantes.getDirV(arrSize)
+
+            if arrSizeDirv == None:
+                dirV = memoria.memoria["constante"]["int"] + contInt
+                contInt += 1
+                tablaDeConstantes.addConstante(dirV, arrSize, "int")
+                arrSizeDirv = dirV
+            arrDirv = arrDirv.dirV
+            #! Ya tengo la direccion del arreglo y el tamaño (arrDirv y arrSizeDirv)
             try:
-                # print(pOp, pType,pVars)
                 arrIndex = int(tree.children[2].value)
-                # print("ArrINDEX", arrIndex)
-                try:
-                    arrVar = tablaDeVariables.getVariable(pVars[-1])
-                    # print(arrVar)
-                    pType.append(arrVar.type)
-                    arrVar = pVars[-2]
-                    pOp.append(arrVar + arrIndex)
-                except:
-                    arrID = tree.children[0].value
-                    arrVar = tablaDeVariables.getVariable(arrID).dirV
-                    pOp.append(arrVar + arrIndex)
+                constExist = tablaDeConstantes.getDirV(arrIndex)
+                if constExist == None:
+                    dirV = memoria.memoria["constante"]["int"] + contInt
+                    contInt += 1
+                    tablaDeConstantes.addConstante(dirV, arrIndex, "int")
+                    indexDirv = dirV
+                else:
+                    indexDirv = constExist
+                #! Ya tengo la direccion de memoria del index(indexDirv)
             except:
                 arrIndex = tree.children[2].value
-                arrVar = tablaDeVariables.getVariable(pVars[-1])
-                pType.append(arrVar.type)
-                arrVar = pVars[-2]
-                arrIndex = tablaDeVariables.getVariable(arrIndex).value
-                arrIndex = tablaDeConstantes.getConstante(arrIndex)
+                indexDirv = tablaDeVariables.getVariable(arrIndex)
+                if indexDirv == None:
+                    print("Error: Variable " + arrIndex + " no declarada")
+                    exit()
+                indexDirv = indexDirv.dirV
+                valueDirv = tablaDeVariables.getVariable(arrIndex)
+                #! Ya tengo la direccion de memoria del index(indexDirv)
+            cuadruplos.addCuadruplo("VER", indexDirv, 0, arrSizeDirv)
+            pDirv = memoria.pointerTemporal
+            memoria.pointerTemporal += 1
+            contPointers += 1
+            cuadruplos.addCuadruplo("+A", indexDirv, arrDirv, pDirv)
+            pVars.append(pDirv)
+            pVars.append(arrID)
+            pType.append(arrType)
 
-                pOp.append(arrVar + arrIndex)
+            #     # print(pOp, pType,pVars)
+            #     arrIndex = int(tree.children[2].value)
+            #     # print("ArrINDEX", arrIndex)
+            #     try:
+            #         arrVar = tablaDeVariables.getVariable(pVars[-1])
+            #         print(arrVar)
+            #         pType.append(arrVar.type)
+            #         # arrVar = pVars[-2]
+            #         pOp.append(arrVar.dirV)
+            #         print(pOp)
+            #     except:
+            #         arrID = tree.children[0].value
+            #         arrVar = tablaDeVariables.getVariable(arrID).dirV
+            #         pOp.append(arrVar + arrIndex)
+            # except:
+            #     arrIndex = tree.children[2].value
+            #     arrVar = tablaDeVariables.getVariable(pVars[-1])
+            #     pType.append(arrVar.type)
+            #     arrVar = pVars[-2]
+            #     arrIndex = tablaDeVariables.getVariable(arrIndex).value
+            #     arrIndex = tablaDeConstantes.getConstante(arrIndex)
+
+            #     pOp.append(arrVar + arrIndex)
         else:
             # print("Es comparacion")
             try:
@@ -342,25 +399,78 @@ class NeuralPoints(Visitor):
     def asignacioncompleja(self, tree):
         varName = tree.children[0].value
         varIndex = -1 
-        try:
-            varIndex = int(tree.children[2].value)
-        except:
-            varIndex = tree.children[2].value
-            var = tablaDeVariables.getVariable(varIndex)
-            varIndex = tablaDeConstantes.getConstante(var.value)
-        var = tablaDeVariables.getVariable(varName)
-        if var == None:
-            print("Error: Variable no declarada")
-            exit()
-        varSize = int(var.size)
-        if varIndex >= varSize:
-            print("Error: Indice fuera de rango")
-            exit()
-        dirV = var.dirV + varIndex
-        # print(varName, varIndex, dirV)
-        pVars.append(dirV)
+        arrDirV = -1
+        valDirV = -1        
+        varIndex = tree.children[2].value
         pVars.append(varName)
-        
+        pVars.append(varIndex)
+        #     var = tablaDeVariables.getVariable(varIndex)
+        #     varIndex = tablaDeConstantes.getConstante(var.value)
+        # var = tablaDeVariables.getVariable(varName)
+        # if var == None:
+        #     print("Error: Variable no declarada")
+        #     exit()
+        # varSize = int(var.size)
+        # if varIndex >= varSize:
+        #     print("Error: Indice fuera de rango")
+        #     exit()
+        # dirV = var.dirV + varIndex
+        # # print(varName, varIndex, dirV)
+        # pVars.append(dirV)
+        # pVars.append(varName)
+    
+
+    def np_arr(self, tree):
+        global contInt, contPointers
+        index = pVars.pop()
+        arr = pVars.pop()
+        indexR = -1
+        indexDirv = -1
+        arrDirV = -1
+        valueDirv = -1
+        arrSize = -1
+        arrSizeDirv = -1
+
+        arrDirV = tablaDeVariables.getVariable(arr)
+        if arrDirV == None:
+            print("Error: Variable " + arr + " no declarada")
+            exit()
+        arrSize = int(arrDirV.size)
+        arrSizeDirv = tablaDeConstantes.getDirV(arrSize)
+        if arrSizeDirv == None:
+            dirV = memoria.memoria["constante"]["int"] + contInt
+            contInt += 1
+            tablaDeConstantes.addConstante(dirV, arrSize, "int")
+            arrSizeDirv = dirV
+        arrDirV = arrDirV.dirV
+        #! YA tengo la direccion del arreglo y su tamaño (arrDirV, arrSizeDirv)
+        try:
+            indexR = int(index)
+            valueDirv = tablaDeConstantes.getDirV(indexR)
+            if valueDirv == None:
+                
+                dirV = memoria.memoria["constante"]["int"] + contInt
+                contInt += 1
+                tablaDeConstantes.addConstante(dirV, indexR, "int")
+                indexDirv = dirV
+            else:
+                indexDirv = tablaDeConstantes.getDirV(indexR)
+        except:
+            indexR = index
+            indexDirv = tablaDeVariables.getVariable(indexR)
+            if indexDirv == None:
+                print("Error: Variable ", indexR, "no declarada")
+                exit()
+            indexDirv = indexDirv.dirV
+            valueDirv = tablaDeVariables.getVariable(index)
+        #! Ya se tiene la direccion del index (indexDirv)
+        cuadruplos.addCuadruplo("VER", indexDirv, 0, arrSizeDirv)
+        pDirv = memoria.pointerTemporal
+        memoria.pointerTemporal += 1
+        contPointers += 1
+        cuadruplos.addCuadruplo("+A", indexDirv, arrDirV, pDirv)
+        pVars.append(pDirv)
+        pVars.append(arr)
 
     #! Funciones para generacion de cuadruplos del condicional IF
     #* Funcion para añadir el gotoF a la pila de saltos y crear el cuadruplo
@@ -642,6 +752,7 @@ class NeuralPoints(Visitor):
         # pIsVar.pop() # Quitar bandera de variable de la pila de banderas
 
     def np_end_func(self, tree):
+        global contVariablesTemporales, contTempInt, contIntVars, contInt, contFloatVars, contFloat, contBoolVars, contBool, contStringVars, contString, contTempFloat, contTempBool, contTempString, contPointers
         if len(pIsVar) > 0:
             pIsVar.pop()
         # memoria.booleanLocal = memoria.memoria["local"]["boolean"]
@@ -667,9 +778,10 @@ class NeuralPoints(Visitor):
         function.floatVar = contVFloat
         function.stringVar = contVString
         function.booleanVar = contVBoolean
+        function.pointerTemp = contPointers
         funcDirectory.updateFunction(function)
         tablaDeVariables.resetTable()
-        global contVariablesTemporales, contTempInt, contIntVars, contInt, contFloatVars, contFloat, contBoolVars, contBool, contStringVars, contString, contTempFloat, contTempChar, contTempBool, contTempString
+        
         contVariablesTemporales = 1
         memoria.intLocal = memoria.memoria["local"]["int"]
         memoria.floatLocal = memoria.memoria["local"]["float"]
@@ -679,6 +791,7 @@ class NeuralPoints(Visitor):
         memoria.floatTemporal = memoria.memoria["temporal"]["float"]
         memoria.stringTemporal = memoria.memoria["temporal"]["string"]
         memoria.booleanTemporal = memoria.memoria["temporal"]["boolean"]
+        memoria.pointerTemporal = memoria.memoria["temporal"]["pointer"]
         contTempInt = 0
         contTempFloat = 0
         contTempString = 0
@@ -687,6 +800,7 @@ class NeuralPoints(Visitor):
         contFloatVars = 0
         contStringVars = 0
         contBoolVars = 0
+        contPointers = 0
         # print("End Funcion",pOp, pType)
         # print(function)
         # print(tablaDeVariables)
@@ -834,14 +948,22 @@ class NeuralPoints(Visitor):
         except:
             pass
 
+    #Obtener apuntador del arreglo
+    # def escriturax(self, tree):
+    #     pOp.append(99999)
     
+
     def np_escritura(self, tree):
+        # print("PRINT", pVars, pOp)
         value = pOp.pop()
         pType.pop()
         exist = tablaDeVariables.getVariable(value)
         dirV = -1
         if exist != None:
-            dirV = exist.dirV
+            if exist.value >= 42000:
+                dirV = exist.value
+            else:
+                dirV = exist.dirV
         else:
             dirV = value
         cuadruplos.addCuadruplo("PRINT", None, None, dirV)
@@ -917,14 +1039,20 @@ class NeuralPoints(Visitor):
             # Checar si el ultimo operador es de suma o resta
             global contVariablesTemporales,contTempInt, contTempFloat, contTempString, contTempBool 
             #! Sacar direcciones de memoria de los operandos
-            if pOper[-1] == "+" or pOper[-1] == "-":
-                right_operand = pOp.pop()  # Obtener el operando de la derecha
-                left_operand = pOp.pop()  # Obtener el operando de la izquierda
-                right_type = pType.pop()  # Obtener el tipo del operando de la derecha
-                left_type = pType.pop()  # Obtener el tipo del operando de la izquierda
-                operator = pOper.pop()  # Obtener el operador
-                result_type = semantic_Cube.getValue(operator, left_type, right_type)  # Obtener el tipo de resultado
-                temp = -1
+
+            if len(pVars) >= 4:
+                pVars.pop()
+                right_operand = pVars.pop()
+                right_type = pType.pop()
+                pVars.pop()
+                left_operand = pVars.pop()
+                left_type = pType.pop()
+                operator = pOper.pop()
+                result_type = semantic_Cube.getValue(operator,left_type, right_type)
+                if result_type == "error":
+                    print("Error: Tipo de dato no valido")
+                    exit()
+                temp = memoria.intTemporal
                 if result_type == "int":
                     temp = memoria.intTemporal
                     memoria.intTemporal += 1
@@ -937,20 +1065,48 @@ class NeuralPoints(Visitor):
                     temp = memoria.stringTemporal
                     memoria.stringTemporal += 1
                     contTempString += 1
-                elif result_type == "boolean":
+                elif result_type == "bool":
                     temp = memoria.booleanTemporal
                     memoria.booleanTemporal += 1
                     contTempBool += 1
-                existLeft = tablaDeVariables.getVariable(left_operand)
-                existRight = tablaDeVariables.getVariable(right_operand)
-                if existLeft != None:
-                    left_operand = existLeft.dirV
-                if existRight != None:
-                    right_operand = existRight.dirV
-                cuadruplos.addCuadruplo(operator, left_operand, right_operand,temp)  # Crear el cuadruplo
-                contVariablesTemporales += 1  # Aumentar el contador de variables temporales
-                pOp.append(temp) # Agregar el resultado a la pila de operandos #TODO: Agregar el valor de la variable temporal
-                pType.append(result_type) # Agregar el tipo de resultado a la pila de tipos
+                pOp.append(temp)
+                pType.append(result_type)
+                cuadruplos.addCuadruplo(operator, left_operand, right_operand,temp) 
+            else:
+                if pOper[-1] == "+" or pOper[-1] == "-":
+                    right_operand = pOp.pop()  # Obtener el operando de la derecha
+                    left_operand = pOp.pop()  # Obtener el operando de la izquierda
+                    right_type = pType.pop()  # Obtener el tipo del operando de la derecha
+                    left_type = pType.pop()  # Obtener el tipo del operando de la izquierda
+                    operator = pOper.pop()  # Obtener el operador
+                    result_type = semantic_Cube.getValue(operator, left_type, right_type)  # Obtener el tipo de resultado
+                    temp = -1
+                    if result_type == "int":
+                        temp = memoria.intTemporal
+                        memoria.intTemporal += 1
+                        contTempInt += 1
+                    elif result_type == "float":
+                        temp = memoria.floatTemporal
+                        memoria.floatTemporal += 1
+                        contTempFloat += 1
+                    elif result_type == "string":
+                        temp = memoria.stringTemporal
+                        memoria.stringTemporal += 1
+                        contTempString += 1
+                    elif result_type == "boolean":
+                        temp = memoria.booleanTemporal
+                        memoria.booleanTemporal += 1
+                        contTempBool += 1
+                    existLeft = tablaDeVariables.getVariable(left_operand)
+                    existRight = tablaDeVariables.getVariable(right_operand)
+                    if existLeft != None:
+                        left_operand = existLeft.dirV
+                    if existRight != None:
+                        right_operand = existRight.dirV
+                    cuadruplos.addCuadruplo(operator, left_operand, right_operand,temp)  # Crear el cuadruplo
+                    contVariablesTemporales += 1  # Aumentar el contador de variables temporales
+                    pOp.append(temp) # Agregar el resultado a la pila de operandos #TODO: Agregar el valor de la variable temporal
+                    pType.append(result_type) # Agregar el tipo de resultado a la pila de tipos
 
     #*Funcion para crear el cuadruplo de la multiplicacion y division
     def  cuadruplo_md(self, tree):
@@ -1090,37 +1246,58 @@ class NeuralPoints(Visitor):
 
     #* Funcion para asignar el valor a una variable
     def np_asignacion(self, tree):
-        
-        # print("Asignacion",pOp,pVars,pType)
-        varValue = pOp.pop() # Obtener el valor de la pila de operandos
-        varName = pVars.pop() # Obtener el nombre de la variable
-        varType = pType.pop() # Obtener el tipo de la variable #TODO: Verificar que el tipo de la variable sea el mismo que el tipo del valor
-        # print("Asignacion final",pOp,pType)
-        var = tablaDeVariables.getVariable(varName)
-        valueDir = -1
-        if var.type != varType:
-            print("Error: Tipos incompatibles")
-            exit()
-        
-        # if len(pIsVar) > 0:
-        #     pIsVar.pop()
-        #     print(varValue)
-        #     valueDir = tablaDeVariables.getVariable(varValue)
-        #     var.value = valueDir.dirV
-        exist = tablaDeVariables.getVariable(varValue)
-        if exist != None:
-            var.value = exist.dirV
-            varValue = exist.dirV
+        #! Caso de igualar arreglos
+        if len(pVars) == 4:
+            pVars.pop()
+            resultDirv = pVars.pop()
+            pVars.pop()
+            leftDirv = pVars.pop()
+            cuadruplos.addCuadruplo("=", resultDirv, None, leftDirv)
+        elif len(pVars) == 3:
+            pVars.pop()
+            resultDirv = pVars.pop()
+            leftDirv = pVars.pop()
+
+            exist = tablaDeVariables.getVariable(leftDirv)
+            if exist == None:
+                print("Error: Variable ", leftDirv, " no declarada")
+                exit()
+            leftDirv = exist.dirV
+            exist.value = resultDirv
+            tablaDeVariables.updateVariable(exist)
+
+            cuadruplos.addCuadruplo("=A", resultDirv, None, leftDirv)
         else:
-            var.value = varValue
-        tablaDeVariables.updateVariable(var)
-        varNameDir = tablaDeVariables.getVariable(varName).dirV
-        
-        if int(var.size) != -1:
-            dirV = pVars.pop()
-            cuadruplos.addCuadruplo("=", varValue, None, dirV) # Crear el cuadruplo de asignacion
-        else:
-            cuadruplos.addCuadruplo("=", varValue, None, varNameDir) # Crear el cuadruplo de asignacion
+            varValue = pOp.pop() # Obtener el valor de la pila de operandos
+            varName = pVars.pop() # Obtener el nombre de la variable
+            varType = pType.pop() # Obtener el tipo de la variable #TODO: Verificar que el tipo de la variable sea el mismo que el tipo del valor
+            # print("Asignacion final",pOp,pType)
+            var = tablaDeVariables.getVariable(varName)
+            valueDir = -1
+            
+            if var.type != varType:
+                print("Error: Tipos incompatibles")
+                exit()
+            
+            # if len(pIsVar) > 0:
+            #     pIsVar.pop()
+            #     print(varValue)
+            #     valueDir = tablaDeVariables.getVariable(varValue)
+            #     var.value = valueDir.dirV
+            exist = tablaDeVariables.getVariable(varValue)
+            if exist != None:
+                var.value = exist.dirV
+                varValue = exist.dirV
+            else:
+                var.value = varValue
+            tablaDeVariables.updateVariable(var)
+            varNameDir = tablaDeVariables.getVariable(varName).dirV
+            
+            if int(var.size) != -1:
+                dirV = pVars.pop()
+                cuadruplos.addCuadruplo("=", varValue, None, dirV) # Crear el cuadruplo de asignacion
+            else:
+                cuadruplos.addCuadruplo("=", varValue, None, varNameDir) # Crear el cuadruplo de asignacion
 
     def np_asignacion_2(self, tree):
         varValue = pOp.pop()
@@ -1152,6 +1329,7 @@ class NeuralPoints(Visitor):
         funcMain.floatVar = contFloatVars
         funcMain.stringVar = contStringVars
         funcMain.booleanVar = contBoolVars
+        funcMain.pointerTemp = contPointers
         funcDirectory.updateFunction(funcMain)
 
         # print("pVars",pVars)

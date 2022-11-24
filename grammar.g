@@ -102,10 +102,11 @@ asignacionsimple: ID IGUAL expresion PUNTOYCOMA np_asignacion
 np_asignacion:
 //np_var:
 
-asignacioncompleja: ID CORCHETE_I INT CORCHETE_D IGUAL expresion PUNTOYCOMA np_asignacion | ID CORCHETE_I ID CORCHETE_D IGUAL expresion PUNTOYCOMA np_asignacion | asignacionlista
+asignacioncompleja: ID CORCHETE_I INT CORCHETE_D IGUAL np_arr expresion PUNTOYCOMA np_asignacion | ID CORCHETE_I ID CORCHETE_D IGUAL np_arr expresion PUNTOYCOMA np_asignacion | asignacionlista
 asignacionlista: ID IGUAL expresionlista PUNTOYCOMA
 expresionlista: CORCHETE_I expresion explista CORCHETE_D
 explista: COMA expresion explista |
+np_arr:
 
 escritura: PRINT PARENTESIS_I escriturax PARENTESIS_D PUNTOYCOMA
 //escriturax: expresion escrituray  | STRING escrituray

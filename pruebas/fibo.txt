@@ -19,6 +19,8 @@ function fibonacci(n:int): int {
 
 main(){
     var result : int;
-    result = fibonacci(10);
+    var n : int;
+    input(n);
+    result = fibonacci(n);
     print("Result", result);
 }

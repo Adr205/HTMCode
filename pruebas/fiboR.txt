@@ -1,20 +1,19 @@
 
+function fibo(n:int) : int {
+    if (n < 2) {
+        return 1;
+    } 
 
-function factorial(n:int): int {
-    var factorialRes: int;
-    factorialRes = 1;
-    
-    for(i = 1; i++; i < n+1) {
-        factorialRes = factorialRes * i;
-    }
-    return factorial(4);
+    return fibo(n-1) + fibo(n-2);
 }
 
 
-
-
 main(){
-    var result : int;
-    result = factorial(5);
-    print(result);
+    var x: int = 5;
+    var y: int;
+
+
+    y = fibo(x);
+    print(y);
+
 }

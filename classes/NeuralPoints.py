@@ -58,8 +58,10 @@ contBoolVars = 0 # * contador de variables de tipo bool
 contPointers = 0 # * contador de apuntadores
 
 
-# TODO: Punto neuralgico Read
-# TODO: Punto neuralgico Input
+#* Valores para el uso de recursividad
+isRecursive = False
+newRecursive = True
+recursiveGOTO = -1
 
 
 class NeuralPoints(Visitor):
@@ -163,7 +165,6 @@ class NeuralPoints(Visitor):
         varIgual = tree.children[4].value
         varValue = 0  # TODO: Agarrar el valor de la pila de operandos y asignar el valor a la variable
         if(varIgual == "="):
-            # print(pOp)
             # varValue = pOp.pop()  # TODO: Agarrar el valor de la pila de operandos y asignar el valor a la variable
             varValue = -1  # TODO: Agarrar el valor de la pila de operandos y asignar el valor a la variable
         else:
@@ -206,9 +207,8 @@ class NeuralPoints(Visitor):
             arrDirv = tablaDeVariables.getVariable(arrID)
 
             if arrDirv == None:
-                if arrDirV == None:
-                    print("Error: Variable " + arrID + " no declarada")
-                    exit()
+                print("Error: Variable " + arrID + " no declarada")
+                exit()
             arrType = arrDirv.type
             arrSize = int(arrDirv.size)
             arrSizeDirv = tablaDeConstantes.getDirV(arrSize)
@@ -248,32 +248,7 @@ class NeuralPoints(Visitor):
             pVars.append(pDirv)
             pVars.append(arrID)
             pType.append(arrType)
-
-            #     # print(pOp, pType,pVars)
-            #     arrIndex = int(tree.children[2].value)
-            #     # print("ArrINDEX", arrIndex)
-            #     try:
-            #         arrVar = tablaDeVariables.getVariable(pVars[-1])
-            #         print(arrVar)
-            #         pType.append(arrVar.type)
-            #         # arrVar = pVars[-2]
-            #         pOp.append(arrVar.dirV)
-            #         print(pOp)
-            #     except:
-            #         arrID = tree.children[0].value
-            #         arrVar = tablaDeVariables.getVariable(arrID).dirV
-            #         pOp.append(arrVar + arrIndex)
-            # except:
-            #     arrIndex = tree.children[2].value
-            #     arrVar = tablaDeVariables.getVariable(pVars[-1])
-            #     pType.append(arrVar.type)
-            #     arrVar = pVars[-2]
-            #     arrIndex = tablaDeVariables.getVariable(arrIndex).value
-            #     arrIndex = tablaDeConstantes.getConstante(arrIndex)
-
-            #     pOp.append(arrVar + arrIndex)
         else:
-            # print("Es comparacion")
             indexDirv = -1
             arrDirv = -1
             arrSize = -1
@@ -316,8 +291,6 @@ class NeuralPoints(Visitor):
                 indexDirv = indexDirv.dirV
                 valueDirv = tablaDeVariables.getVariable(arrIndex)
                 #! Ya tengo la direccion de memoria del index(indexDirv)
-
-            # print(arrDirv, arrSizeDirv, indexDirv)
             cuadruplos.addCuadruplo("VER", indexDirv, 0, arrSizeDirv)
             pDirv = memoria.pointerTemporal
             memoria.pointerTemporal += 1
@@ -327,34 +300,6 @@ class NeuralPoints(Visitor):
             pVars.append(arrID)
             pType.append(arrType)
             cuadruplos.writeCuadruplos()
-
-
-            # try:
-            #     arrIndex = int(tree.children[2].value)
-            #     arrVar =  tree.children[0].value
-            #     arrVar = tablaDeVariables.getVariable(arrVar)
-            #     arrDirV = arrVar.dirV
-            #     arrType = arrVar.type
-            #     pType.append(arrType)
-            #     pOp.append(arrDirV + arrIndex)
-            # except:
-            #     arrIndex = tree.children[2].value
-            #     indexVar = tablaDeVariables.getVariable(arrIndex)
-            #     indexValue = indexVar.value
-            #     # print("IndexValue", indexValue)
-            #     if indexValue >= 20000 and indexValue < 29000:
-            #         indexValue = tablaDeConstantes.getConstante(indexValue)
-                
-            #     # print("IndexValue", indexValue)
-            #     arrVar =  tree.children[0].value
-            #     arrVar = tablaDeVariables.getVariable(arrVar)
-            #     arrDirV = arrVar.dirV
-            #     arrType = arrVar.type
-                
-            #     pType.append(arrType)
-            #     pOp.append(arrDirV + indexValue)
-        
-
     
     # * Funcion para declarar variables en la tabla de variables
     def simpledeclaracion(self, tree):
@@ -379,7 +324,6 @@ class NeuralPoints(Visitor):
             memoria.booleanLocal += 1
             contBoolVars += 1
         tablaDeVariables.addVariable(Variable(varName, varType, "N/A", dirV))
-        # print("Declaracion", pOp, pType)
 
     # * Funcion para declarar variables en la tabla de variables y asignarles un valor
     def simpleasignacion(self, tree):
@@ -413,7 +357,6 @@ class NeuralPoints(Visitor):
         # TODO: Agregar el procedimiento para los arreglos
         varSize = tree.children[3].value
         varType = tree.children[6].children[0].value
-        # print(varName, varSize, varType)
         if varType == 'int':
             dirV = memoria.intLocal
             memoria.intLocal += int(varSize)
@@ -431,7 +374,6 @@ class NeuralPoints(Visitor):
             memoria.booleanLocal += int(varSize)
             contBoolVars += int(varSize)
         tablaDeVariables.addVariable(Variable(varName, varType, "N/A", dirV, "local", varSize))
-        # print(tablaDeVariables)
 
     def compuestaasignacion(self, tree):
         varName = tree.children[1].value
@@ -449,7 +391,6 @@ class NeuralPoints(Visitor):
         if var == None:
             print("Error: Variable no declarada")
             exit()
-        # print("Asignacion Simple", pOp, pType)
     
     def asignacioncompleja(self, tree):
         varName = tree.children[0].value
@@ -458,22 +399,7 @@ class NeuralPoints(Visitor):
         valDirV = -1        
         varIndex = tree.children[2].value
         pVars.append(varName)
-        pVars.append(varIndex)
-        #     var = tablaDeVariables.getVariable(varIndex)
-        #     varIndex = tablaDeConstantes.getConstante(var.value)
-        # var = tablaDeVariables.getVariable(varName)
-        # if var == None:
-        #     print("Error: Variable no declarada")
-        #     exit()
-        # varSize = int(var.size)
-        # if varIndex >= varSize:
-        #     print("Error: Indice fuera de rango")
-        #     exit()
-        # dirV = var.dirV + varIndex
-        # # print(varName, varIndex, dirV)
-        # pVars.append(dirV)
-        # pVars.append(varName)
-    
+        pVars.append(varIndex)    
 
     def np_arr(self, tree):
         global contInt, contPointers
@@ -669,6 +595,7 @@ class NeuralPoints(Visitor):
     def funcion(self,tree):
         global contVariablesTemporales
         contVariablesTemporales = 1
+        #Resetea los contadores de variables y temporales
         memoria.intLocal = memoria.memoria["local"]["int"]
         memoria.floatLocal = memoria.memoria["local"]["float"]
         memoria.stringLocal = memoria.memoria["local"]["string"]
@@ -682,9 +609,9 @@ class NeuralPoints(Visitor):
         funcType = tree.children[7].children[0].value # Tipo de la funcion
         pOp.append(varName) # Agregar nombre de la funcion a la pila de operandos
         pType.append(funcType) # Agregar tipo de la funcion a la pila de tipos
-        # print("Funcion",pOp, pType)
         vars = tree.children[4].scan_values(lambda v: isinstance(v, Token))
         dirFuncVar = -1
+        #Agrega la variable global con tipo de la funcion
         if funcType == "int":
             dirFuncVar = memoria.intGlobal
             memoria.intGlobal += 1
@@ -698,9 +625,8 @@ class NeuralPoints(Visitor):
             dirFuncVar = memoria.booleanGlobal
             memoria.booleanGlobal += 1
         tablaDeVariables.addVariableGlobal(Variable(varName, funcType, "N/A", dirFuncVar))
-        # print("Globales")
-        # tablaDeVariables.printGlobales()
         global funcVars
+        #Guarda las variables y sus tipos de los parametros utilizados en la funcion
         for var in vars:
             if var == "int" or var == "float" or var == "string" or var == "boolean":
                 pType.append(var.value)
@@ -709,31 +635,6 @@ class NeuralPoints(Visitor):
             else:
                 pOp.append(var.value)
                 funcVars +=1
-        # print("Funcion final",pOp, pType)
-
-    # def funciones(self,tree):
-    #     global contInt, contFloat, contString, contBool
-    #     funcName = tree.children[0].children[1].value
-    #     funcType = tree.children[0].children[7].value
-    #     # funcType = tree.children[0].children[7].children[0].value
-    #     dirV = -1
-    #     # if varType == 'int':
-    #     #     dirV = memoria.intGlobal
-    #     #     memoria.intGlobal += 1
-    #     if funcType == "int":
-    #         dirV = memoria.intGlobal
-    #         memoria.intGlobal += 1
-    #     elif funcType == "float":
-    #         dirV = memoria.floatGlobal
-    #         memoria.floatGlobal += 1
-    #     elif funcType == "string":
-    #         dirV = memoria.stringGlobal
-    #         memoria.stringGlobal += 1
-    #     elif funcType == "boolean":
-    #         dirV = memoria.booleanGlobal
-    #         memoria.booleanGlobal += 1
-
-    #     print(funcName, funcType, dirV)
 
     def funcionvoid(self,tree):
         funcName = tree.children[1].value
@@ -789,25 +690,40 @@ class NeuralPoints(Visitor):
         funcDirectory.addFunction(func) # Agregar funcion al directorio de funciones
 
     def np_func_result(self,tree):
-        global funcVars
+        global funcVars, isRecursive, recursiveGOTO, newRecursive
         funcVars = 0
         exist = tablaDeVariables.getVariable(pOp[-1])
-        # print("RETURN",exist) #! Añadir resultado a la tabla de variable de globales
+        #! Añadir resultado a la tabla de variable de globales
         funcDirVGlobal = tablaDeVariables.getVariableGlobal(pContexto[-1]).dirV        
         
 
         if exist != None:
             cuadruplos.addCuadruplo("RETURN", funcDirVGlobal, None, exist.dirV)
+            if isRecursive and newRecursive:
+                recursiveGOTO = cuadruplos.contador
+                cuadruplos.addCuadruplo("GOTO", None, None, "N/A")
+                newRecursive = False
         else:
             cuadruplos.addCuadruplo("RETURN", funcDirVGlobal, None, pOp[-1])
+            if isRecursive and newRecursive:
+                recursiveGOTO = cuadruplos.contador
+                cuadruplos.addCuadruplo("GOTO", None, None, "N/A")
+                newRecursive = False
+        
+        
+
         funcType = pType.pop() # Tipo de la funcion
         result = pOp.pop() # Nombre de la funcion
         value = "Get Result" #Get value of var
         pResultFuncs.append([result, funcType, value]) # Agregar funcion a la pila de funciones con resultado
         # pIsVar.pop() # Quitar bandera de variable de la pila de banderas
+    def returnv(self,tree):
+        global isRecursive
+        isRecursive = True
 
+    # Actualiza los contadores de variables y temporales y los resetea
     def np_end_func(self, tree):
-        global contVariablesTemporales, contTempInt, contIntVars, contInt, contFloatVars, contFloat, contBoolVars, contBool, contStringVars, contString, contTempFloat, contTempBool, contTempString, contPointers
+        global contVariablesTemporales, contTempInt, contIntVars, contInt, contFloatVars, contFloat, contBoolVars, contBool, contStringVars, contString, contTempFloat, contTempBool, contTempString, contPointers, isRecursive, recursiveGOTO
         if len(pIsVar) > 0:
             pIsVar.pop()
         # memoria.booleanLocal = memoria.memoria["local"]["boolean"]
@@ -820,8 +736,11 @@ class NeuralPoints(Visitor):
         contTFloat = memoria.floatTemporal - memoria.memoria["temporal"]["float"]
         contTString = memoria.stringTemporal - memoria.memoria["temporal"]["string"]
 
-        # print("Temporales utilizados: ", contTempInt, contTempFloat, contTempString, contTempBool) 
         cuadruplos.addCuadruplo("ENDFUNC", None, None, None)
+        if isRecursive:
+            cuadruplos.fillCuadruplo(recursiveGOTO, cuadruplos.contador-1)
+            isRecursive = False
+
         funcName = pContexto.pop()
         function = funcDirectory.getFunction(funcName)
         function.variables = tablaDeVariables.variables
@@ -856,9 +775,6 @@ class NeuralPoints(Visitor):
         contStringVars = 0
         contBoolVars = 0
         contPointers = 0
-        # print("End Funcion",pOp, pType)
-        # print(function)
-        # print(tablaDeVariables)
 
     #! Funciones para cuadruplos de llamada a funciones
     def llamadavoid(self, tree):
@@ -870,14 +786,12 @@ class NeuralPoints(Visitor):
         global pVars
         funcID = tree.children[0].value
         pVars.append(funcID)
-        # print("Lamada Funcion",funcID,pOp, pType)
     
     #* Funcion para agregar cuadruplos de llamada a funciones
     #* Agrega el Era, los parametros y el GOSUB
     #Y si es una funcion con resultado, agrega el parametro de retorno
     def np_func_vars(self, tree):
-        global pVars
-        # print("Func Vars",pVars, pType)
+        global pVars, isRecursive
         funcName = pVars.pop()
         funcVars = []
         for i in range(len(pOp)):
@@ -885,9 +799,6 @@ class NeuralPoints(Visitor):
         #Get function
         funcVars.reverse()
         function = funcDirectory.getFunction(funcName)
-        # print(function)
-        # print(function.variables)
-        # print("Func Vars end",pVars, pType)
         
         if len(funcVars) != len(function.params):
             print("Error: Numero de parametros incorrecto, se esperaban " + str(len(function.params)) + " parametros y se recibieron " + str(len(funcVars)))
@@ -900,8 +811,15 @@ class NeuralPoints(Visitor):
                 print("Error: Tipo de parametro incorrecto, se esperaba " + function.params[i][1] + " y se recibio " + funcVars[i][1])
                 exit()
             exist = tablaDeVariables.getVariable(funcVars[i][0])
-            # print("function sub", function.type)
             cuadruplos.writeCuadruplos()
+            #! Agrega las variables en el caso de que sea una recusion
+            if(len(function.variables)) == 0:
+                
+                function.variables = tablaDeVariables.variables
+                funcDirectory.updateFunction(function)
+                isRecursive = True
+                
+
             varDir = function.variables[function.params[i][0]].dirV
             if exist != None:
                 cuadruplos.addCuadruplo("PARAM", exist.dirV, None, varDir)
@@ -934,7 +852,6 @@ class NeuralPoints(Visitor):
                 memoria.booleanTemporal += 1
                 contTempBool += 1
                 pType.append("boolean")
-            # print("Dir Global", dirGlobal, temp)
             cuadruplos.addCuadruplo("=", dirGlobal, None, temp)
             pOp.append(temp)
 
@@ -993,10 +910,8 @@ class NeuralPoints(Visitor):
                     pOp.append(dirV)
                     pType.append(var.type)
                 else:
-                    # print(var.value)
                     index = var.value
                     dirV = index
-                    # print("Index", index)
                     varSize = int(var.size)
                     pOp.append(dirV)
                     pType.append(var.type)
@@ -1010,12 +925,9 @@ class NeuralPoints(Visitor):
     
 
     def np_escritura(self, tree):
-        # print("PRINT", pVars, pOp)
-
         #Print arr con contador
         if len(pOp) == 0:
             x = 0
-            print(tree)
         else:
             value = pOp.pop()
             pType.pop()
@@ -1031,10 +943,6 @@ class NeuralPoints(Visitor):
             else:
                 dirV = value
             cuadruplos.addCuadruplo("PRINT", None, None, dirV)
-        # print("print final",pOp,pType)
-    
-    # def np_escritura_arr(self,tree):
-    #     print(tree)
 
     #! Funciones para operaciones aritmeticas
 
@@ -1053,7 +961,6 @@ class NeuralPoints(Visitor):
     #* Funcion para crear el cuadruplo logico
     def np_logico_2(self, tree):
         global contVariablesTemporales, contTempBool
-        # print("Logico", pOp, pType, pOper, pVars)
         cuadruplos.writeCuadruplos
 
         # if len(pVars) > 0:
@@ -1246,7 +1153,6 @@ class NeuralPoints(Visitor):
                 contVariablesTemporales += 1
                 pOp.append(temp)
                 pType.append(result_type)
-                # print("Cuad * /",pOp,pType)
 
 
     #! Funciones para guardar en pila de operandos y tipos
@@ -1255,15 +1161,12 @@ class NeuralPoints(Visitor):
         varName = tree.children[0].value
         var = tablaDeVariables.getVariable(varName)
         if var == None:
-            # print(varName)
-            # print(tablaDeVariables)
             print("Error: Variable no declarada")
             exit()
             
         pOp.append(varName)
         pType.append(var.type)
         pIsVar.append(True)
-        # print("Guardar ID",pOp,pType)
 
         #TODO: Guardar el valor en la memoria de constantes
 
@@ -1370,7 +1273,6 @@ class NeuralPoints(Visitor):
             varValue = pOp.pop() # Obtener el valor de la pila de operandos
             varName = pVars.pop() # Obtener el nombre de la variable
             varType = pType.pop() # Obtener el tipo de la variable #TODO: Verificar que el tipo de la variable sea el mismo que el tipo del valor
-            # print("Asignacion final",pOp,pType)
             var = tablaDeVariables.getVariable(varName)
             valueDir = -1
             
@@ -1380,7 +1282,6 @@ class NeuralPoints(Visitor):
             
             # if len(pIsVar) > 0:
             #     pIsVar.pop()
-            #     print(varValue)
             #     valueDir = tablaDeVariables.getVariable(varValue)
             #     var.value = valueDir.dirV
             exist = tablaDeVariables.getVariable(varValue)
@@ -1417,7 +1318,6 @@ class NeuralPoints(Visitor):
     
 
     def end(self, tree):
-        # print(tablaDeVariables)
         cuadruplos.addCuadruplo("END", None, None, None)
         funcMain = funcDirectory.getFunction("main")
         funcMain.intTemp = contTempInt

@@ -1,0 +1,23 @@
+
+
+function factorial(n:int): int {
+    var factorialRes: int;
+    factorialRes = 1;
+    
+    if(n == 1){
+        return 1;
+    }
+
+    print(n);
+
+    return factorial(n - 1) * n;
+}
+
+
+
+
+main(){
+    var result : int;
+    result = factorial(5);
+    print("result", result);
+}

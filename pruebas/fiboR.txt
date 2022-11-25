@@ -1,0 +1,20 @@
+
+
+function factorial(n:int): int {
+    var factorialRes: int;
+    factorialRes = 1;
+    
+    for(i = 1; i++; i < n+1) {
+        factorialRes = factorialRes * i;
+    }
+    return factorial(4);
+}
+
+
+
+
+main(){
+    var result : int;
+    result = factorial(5);
+    print(result);
+}

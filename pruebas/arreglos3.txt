@@ -1,0 +1,46 @@
+
+function find(n:int): boolean{
+    var arr[5] : int;
+    var x : int = 0;
+    var exist: boolean = false;
+    arr[x] = 10;
+    arr[1] = 24;
+    arr[2] = 31;
+    arr[3] = 45;
+    arr[4] = 5;
+
+    for(i = 0; i++; i < 5){
+        if(n == arr[i]){
+            exist = true;
+        }
+    }
+
+    return exist;
+}
+
+main(){
+
+    var arreglo[3]: int;
+    var x: int;
+    var find: boolean;
+
+    x = 45;
+
+    find = find(x);
+
+    if (find == true){
+        print("El numero existe");
+    }else{
+        print("El numero no existe");
+    }
+
+    find = find(89);
+
+    if (find == true){
+        print("El numero existe");
+    }else{
+        print("El numero no existe");
+    }
+
+    
+}

@@ -109,7 +109,6 @@ explista: COMA expresion explista |
 np_arr:
 
 escritura: PRINT PARENTESIS_I escriturax PARENTESIS_D PUNTOYCOMA
-//escriturax: expresion escrituray  | STRING escrituray
 escriturax: ID CORCHETE_I INT CORCHETE_D escrituray | ID CORCHETE_I ID CORCHETE_D escrituray | expresion escrituray
 escrituray:  np_escritura COMA escriturax | np_escritura
 np_escritura:

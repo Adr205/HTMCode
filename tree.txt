@@ -7,7 +7,7 @@ start
         np_func_id
         (
         funcvars
-          x
+          n
           :
           tipo	int
           funcvarsx
@@ -21,7 +21,7 @@ start
               compuesta
                 compuestadeclaracion
                   var
-                  arreglo
+                  arr
                   [
                   5
                   ]
@@ -32,37 +32,63 @@ start
             bloq
               declaracion
                 simple
-                  simpledeclaracion
+                  simpleasignacion
                     var
-                    y
+                    x
                     np_is_var_false
                     :
                     tipo	int
+                    =
+                    expresion
+                      exp
+                        termino
+                          factor
+                            varcte
+                              guardar_int	0
+                          terminox
+                        expx
+                      expresionx
                     ;
+                    np_asignacion_2
             bloqx
               bloq
                 declaracion
                   simple
-                    simpledeclaracion
+                    simpleasignacion
                       var
                       exist
                       np_is_var_false
                       :
                       tipo	boolean
+                      =
+                      expresion
+                        exp
+                          termino
+                            factor
+                              varcte
+                                guardar_boolean	false
+                            terminox
+                          expx
+                        expresionx
                       ;
+                      np_asignacion_2
               bloqx
                 bloq
                   estatuto
                     asignacion
-                      asignacionsimple
-                        exist
+                      asignacioncompleja
+                        arr
+                        [
+                        x
+                        ]
                         =
+                        np_arr
                         expresion
                           exp
                             termino
                               factor
                                 varcte
-                                  guardar_boolean	false
+                                  guardar_int	10
                               terminox
                             expx
                           expresionx
@@ -73,9 +99,9 @@ start
                     estatuto
                       asignacion
                         asignacioncompleja
-                          arreglo
+                          arr
                           [
-                          0
+                          1
                           ]
                           =
                           np_arr
@@ -84,7 +110,7 @@ start
                               termino
                                 factor
                                   varcte
-                                    guardar_int	1
+                                    guardar_int	24
                                 terminox
                               expx
                             expresionx
@@ -95,9 +121,9 @@ start
                       estatuto
                         asignacion
                           asignacioncompleja
-                            arreglo
+                            arr
                             [
-                            1
+                            2
                             ]
                             =
                             np_arr
@@ -106,7 +132,7 @@ start
                                 termino
                                   factor
                                     varcte
-                                      guardar_int	20
+                                      guardar_int	31
                                   terminox
                                 expx
                               expresionx
@@ -117,9 +143,9 @@ start
                         estatuto
                           asignacion
                             asignacioncompleja
-                              arreglo
+                              arr
                               [
-                              2
+                              3
                               ]
                               =
                               np_arr
@@ -128,7 +154,7 @@ start
                                   termino
                                     factor
                                       varcte
-                                        guardar_int	36
+                                        guardar_int	45
                                     terminox
                                   expx
                                 expresionx
@@ -139,9 +165,9 @@ start
                           estatuto
                             asignacion
                               asignacioncompleja
-                                arreglo
+                                arr
                                 [
-                                3
+                                4
                                 ]
                                 =
                                 np_arr
@@ -150,7 +176,7 @@ start
                                     termino
                                       factor
                                         varcte
-                                          guardar_int	49
+                                          guardar_int	5
                                       terminox
                                     expx
                                   expresionx
@@ -159,147 +185,107 @@ start
                         bloqx
                           bloq
                             estatuto
-                              asignacion
-                                asignacioncompleja
-                                  arreglo
-                                  [
-                                  4
-                                  ]
-                                  =
-                                  np_arr
-                                  expresion
-                                    exp
-                                      termino
-                                        factor
-                                          varcte
-                                            guardar_int	50
-                                        terminox
-                                      expx
-                                    expresionx
-                                  ;
-                                  np_asignacion
-                          bloqx
-                            bloq
-                              estatuto
-                                ciclos
-                                  ciclofor
-                                    for
-                                    np_for
-                                    (
-                                    asignacionfor
-                                      i
-                                      =
-                                      expresion
-                                        exp
-                                          termino
-                                            factor
-                                              varcte
-                                                guardar_int	0
-                                            terminox
-                                          expx
-                                        expresionx
-                                      ;
-                                    np_for_false
-                                    contador
-                                      contadorsimple
-                                        i
-                                        contadorhelpersimple	++
-                                    ;
+                              ciclos
+                                ciclofor
+                                  for
+                                  np_for
+                                  (
+                                  asignacionfor
+                                    i
+                                    =
                                     expresion
                                       exp
                                         termino
                                           factor
                                             varcte
-                                              guardar_id	i
+                                              guardar_int	0
                                           terminox
                                         expx
                                       expresionx
-                                        np_logico	<
-                                        exp
-                                          termino
-                                            factor
-                                              varcte
-                                                guardar_int	5
-                                            terminox
-                                          expx
-                                        np_logico_2
-                                    )
-                                    bloque
-                                      {
-                                      bloq
-                                        estatuto
-                                          asignacion
-                                            asignacionsimple
-                                              y
-                                              =
-                                              expresion
-                                                exp
-                                                  termino
-                                                    factor
-                                                      varcte
-                                                        arreglo
-                                                          arreglo
-                                                          [
-                                                          i
-                                                          ]
-                                                    terminox
-                                                  expx
-                                                expresionx
-                                              ;
-                                              np_asignacion
-                                      bloqx
-                                        bloq
-                                          estatuto
-                                            condicion
-                                              if
-                                              (
-                                              expresion
-                                                exp
-                                                  termino
-                                                    factor
-                                                      varcte
-                                                        guardar_id	y
-                                                    terminox
-                                                  expx
-                                                expresionx
-                                                  np_logico	==
-                                                  exp
-                                                    termino
-                                                      factor
-                                                        varcte
-                                                          guardar_id	x
-                                                      terminox
-                                                    expx
-                                                  np_logico_2
-                                              )
-                                              np_if
-                                              bloque
-                                                {
-                                                bloq
-                                                  estatuto
-                                                    asignacion
-                                                      asignacionsimple
-                                                        exist
-                                                        =
-                                                        expresion
-                                                          exp
-                                                            termino
-                                                              factor
-                                                                varcte
-                                                                  guardar_boolean	true
-                                                              terminox
-                                                            expx
-                                                          expresionx
-                                                        ;
-                                                        np_asignacion
-                                                bloqx
-                                                }
-                                              condicionx
-                                                np_if_2
-                                        bloqx
-                                      }
-                                    np_for_2
-                            bloqx
+                                    ;
+                                  np_for_false
+                                  contador
+                                    contadorsimple
+                                      i
+                                      contadorhelpersimple	++
+                                  ;
+                                  expresion
+                                    exp
+                                      termino
+                                        factor
+                                          varcte
+                                            guardar_id	i
+                                        terminox
+                                      expx
+                                    expresionx
+                                      np_logico	<
+                                      exp
+                                        termino
+                                          factor
+                                            varcte
+                                              guardar_int	5
+                                          terminox
+                                        expx
+                                      np_logico_2
+                                  )
+                                  bloque
+                                    {
+                                    bloq
+                                      estatuto
+                                        condicion
+                                          if
+                                          (
+                                          expresion
+                                            exp
+                                              termino
+                                                factor
+                                                  varcte
+                                                    guardar_id	n
+                                                terminox
+                                              expx
+                                            expresionx
+                                              np_logico	==
+                                              exp
+                                                termino
+                                                  factor
+                                                    varcte
+                                                      arreglo
+                                                        arr
+                                                        [
+                                                        i
+                                                        ]
+                                                  terminox
+                                                expx
+                                              np_logico_2
+                                          )
+                                          np_if
+                                          bloque
+                                            {
+                                            bloq
+                                              estatuto
+                                                asignacion
+                                                  asignacionsimple
+                                                    exist
+                                                    =
+                                                    expresion
+                                                      exp
+                                                        termino
+                                                          factor
+                                                            varcte
+                                                              guardar_boolean	true
+                                                          terminox
+                                                        expx
+                                                      expresionx
+                                                    ;
+                                                    np_asignacion
+                                            bloqx
+                                            }
+                                          condicionx
+                                            np_if_2
+                                    bloqx
+                                    }
+                                  np_for_2
+                          bloqx
           return
           expresion
             exp
@@ -324,11 +310,13 @@ start
       {
       bloq
         declaracion
-          simple
-            simpledeclaracion
+          compuesta
+            compuestadeclaracion
               var
-              n
-              np_is_var_false
+              arreglo
+              [
+              3
+              ]
               :
               tipo	int
               ;
@@ -338,55 +326,35 @@ start
             simple
               simpledeclaracion
                 var
-                exist
+                x
                 np_is_var_false
                 :
-                tipo	boolean
+                tipo	int
                 ;
         bloqx
           bloq
-            estatuto
-              asignacion
-                asignacionsimple
-                  n
-                  =
-                  expresion
-                    exp
-                      termino
-                        factor
-                          varcte
-                            guardar_int	36
-                        terminox
-                      expx
-                    expresionx
+            declaracion
+              simple
+                simpledeclaracion
+                  var
+                  find
+                  np_is_var_false
+                  :
+                  tipo	boolean
                   ;
-                  np_asignacion
           bloqx
             bloq
               estatuto
                 asignacion
                   asignacionsimple
-                    exist
+                    x
                     =
                     expresion
                       exp
                         termino
                           factor
                             varcte
-                              llamadafunc
-                                find
-                                (
-                                voidvars
-                                  exp
-                                    termino
-                                      factor
-                                        varcte
-                                          guardar_id	n
-                                      terminox
-                                    expx
-                                  vvars
-                                np_func_vars
-                                )
+                              guardar_int	45
                           terminox
                         expx
                       expresionx
@@ -395,55 +363,60 @@ start
             bloqx
               bloq
                 estatuto
-                  condicion
-                    if
-                    (
-                    expresion
-                      exp
-                        termino
-                          factor
-                            varcte
-                              guardar_id	exist
-                          terminox
-                        expx
-                      expresionx
-                        np_logico	==
+                  asignacion
+                    asignacionsimple
+                      find
+                      =
+                      expresion
                         exp
                           termino
                             factor
                               varcte
-                                guardar_boolean	true
+                                llamadafunc
+                                  find
+                                  (
+                                  voidvars
+                                    exp
+                                      termino
+                                        factor
+                                          varcte
+                                            guardar_id	x
+                                        terminox
+                                      expx
+                                    vvars
+                                  np_func_vars
+                                  )
                             terminox
                           expx
-                        np_logico_2
-                    )
-                    np_if
-                    bloque
-                      {
-                      bloq
-                        estatuto
-                          escritura
-                            print
-                            (
-                            escriturax
-                              expresion
-                                exp
-                                  termino
-                                    factor
-                                      varcte
-                                        guardar_string	"El numero existe"
-                                    terminox
-                                  expx
-                                expresionx
-                              escrituray
-                                np_escritura
-                            )
-                            ;
-                      bloqx
-                      }
-                    condicionx
-                      np_if_3
-                      else
+                        expresionx
+                      ;
+                      np_asignacion
+              bloqx
+                bloq
+                  estatuto
+                    condicion
+                      if
+                      (
+                      expresion
+                        exp
+                          termino
+                            factor
+                              varcte
+                                guardar_id	find
+                            terminox
+                          expx
+                        expresionx
+                          np_logico	==
+                          exp
+                            termino
+                              factor
+                                varcte
+                                  guardar_boolean	true
+                              terminox
+                            expx
+                          np_logico_2
+                      )
+                      np_if
                       bloque
                         {
                         bloq
@@ -457,7 +430,7 @@ start
                                     termino
                                       factor
                                         varcte
-                                          guardar_string	"El numero no existe"
+                                          guardar_string	"El numero existe"
                                       terminox
                                     expx
                                   expresionx
@@ -467,7 +440,140 @@ start
                               ;
                         bloqx
                         }
-                      np_if_2
-              bloqx
+                      condicionx
+                        np_if_3
+                        else
+                        bloque
+                          {
+                          bloq
+                            estatuto
+                              escritura
+                                print
+                                (
+                                escriturax
+                                  expresion
+                                    exp
+                                      termino
+                                        factor
+                                          varcte
+                                            guardar_string	"El numero no existe"
+                                        terminox
+                                      expx
+                                    expresionx
+                                  escrituray
+                                    np_escritura
+                                )
+                                ;
+                          bloqx
+                          }
+                        np_if_2
+                bloqx
+                  bloq
+                    estatuto
+                      asignacion
+                        asignacionsimple
+                          find
+                          =
+                          expresion
+                            exp
+                              termino
+                                factor
+                                  varcte
+                                    llamadafunc
+                                      find
+                                      (
+                                      voidvars
+                                        exp
+                                          termino
+                                            factor
+                                              varcte
+                                                guardar_int	89
+                                            terminox
+                                          expx
+                                        vvars
+                                      np_func_vars
+                                      )
+                                terminox
+                              expx
+                            expresionx
+                          ;
+                          np_asignacion
+                  bloqx
+                    bloq
+                      estatuto
+                        condicion
+                          if
+                          (
+                          expresion
+                            exp
+                              termino
+                                factor
+                                  varcte
+                                    guardar_id	find
+                                terminox
+                              expx
+                            expresionx
+                              np_logico	==
+                              exp
+                                termino
+                                  factor
+                                    varcte
+                                      guardar_boolean	true
+                                  terminox
+                                expx
+                              np_logico_2
+                          )
+                          np_if
+                          bloque
+                            {
+                            bloq
+                              estatuto
+                                escritura
+                                  print
+                                  (
+                                  escriturax
+                                    expresion
+                                      exp
+                                        termino
+                                          factor
+                                            varcte
+                                              guardar_string	"El numero existe"
+                                          terminox
+                                        expx
+                                      expresionx
+                                    escrituray
+                                      np_escritura
+                                  )
+                                  ;
+                            bloqx
+                            }
+                          condicionx
+                            np_if_3
+                            else
+                            bloque
+                              {
+                              bloq
+                                estatuto
+                                  escritura
+                                    print
+                                    (
+                                    escriturax
+                                      expresion
+                                        exp
+                                          termino
+                                            factor
+                                              varcte
+                                                guardar_string	"El numero no existe"
+                                            terminox
+                                          expx
+                                        expresionx
+                                      escrituray
+                                        np_escritura
+                                    )
+                                    ;
+                              bloqx
+                              }
+                            np_if_2
+                    bloqx
       }
     end

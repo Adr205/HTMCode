@@ -22,7 +22,7 @@ function find(x:int) : boolean{
 main(){
     var n: int;
     var exist: boolean;
-    n = 36;
+    n = 39;
     exist = find(n);
     if(exist == true){
         print("El numero existe");

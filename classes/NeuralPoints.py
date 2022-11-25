@@ -274,30 +274,85 @@ class NeuralPoints(Visitor):
             #     pOp.append(arrVar + arrIndex)
         else:
             # print("Es comparacion")
+            indexDirv = -1
+            arrDirv = -1
+            arrSize = -1
+            arrSizeDirv = -1
+            arrID = tree.children[0].value
+
+            arrVar = tablaDeVariables.getVariable(arrID)
+            if arrVar == None:
+                print("Error: Variable " + arrID + " no declarada")
+                exit()
+            arrType = arrVar.type
+            arrSize = int(arrVar.size)
+            arrSizeDirv = tablaDeConstantes.getDirV(arrSize)
+
+            if arrSizeDirv == None:
+                dirV = memoria.memoria["constante"]["int"] + contInt
+                contInt += 1
+                tablaDeConstantes.addConstante(dirV, arrSize, "int")
+                arrSizeDirv = dirV
+            arrDirv = arrVar.dirV
+            #! Ya tengo la direccion del arreglo y el tamaño (arrDirv y arrSizeDirv)
+            
             try:
                 arrIndex = int(tree.children[2].value)
-                arrVar =  tree.children[0].value
-                arrVar = tablaDeVariables.getVariable(arrVar)
-                arrDirV = arrVar.dirV
-                arrType = arrVar.type
-                pType.append(arrType)
-                pOp.append(arrDirV + arrIndex)
+                constExist = tablaDeConstantes.getDirV(arrIndex)
+                if constExist == None:
+                    dirV = memoria.memoria["constante"]["int"] + contInt
+                    contInt += 1
+                    tablaDeConstantes.addConstante(dirV, arrIndex, "int")
+                    indexDirv = dirV
+                else:
+                    indexDirv = constExist
+                #! Ya tengo la direccion de memoria del index(indexDirv)
             except:
                 arrIndex = tree.children[2].value
-                indexVar = tablaDeVariables.getVariable(arrIndex)
-                indexValue = indexVar.value
-                # print("IndexValue", indexValue)
-                if indexValue >= 20000 and indexValue < 29000:
-                    indexValue = tablaDeConstantes.getConstante(indexValue)
+                indexDirv = tablaDeVariables.getVariable(arrIndex)
+                if indexDirv == None:
+                    print("Error: Variable " + arrIndex + " no declarada")
+                    exit()
+                indexDirv = indexDirv.dirV
+                valueDirv = tablaDeVariables.getVariable(arrIndex)
+                #! Ya tengo la direccion de memoria del index(indexDirv)
+
+            # print(arrDirv, arrSizeDirv, indexDirv)
+            cuadruplos.addCuadruplo("VER", indexDirv, 0, arrSizeDirv)
+            pDirv = memoria.pointerTemporal
+            memoria.pointerTemporal += 1
+            contPointers += 1
+            cuadruplos.addCuadruplo("+A", indexDirv, arrDirv, pDirv)
+            pVars.append(pDirv)
+            pVars.append(arrID)
+            pType.append(arrType)
+            cuadruplos.writeCuadruplos()
+
+
+            # try:
+            #     arrIndex = int(tree.children[2].value)
+            #     arrVar =  tree.children[0].value
+            #     arrVar = tablaDeVariables.getVariable(arrVar)
+            #     arrDirV = arrVar.dirV
+            #     arrType = arrVar.type
+            #     pType.append(arrType)
+            #     pOp.append(arrDirV + arrIndex)
+            # except:
+            #     arrIndex = tree.children[2].value
+            #     indexVar = tablaDeVariables.getVariable(arrIndex)
+            #     indexValue = indexVar.value
+            #     # print("IndexValue", indexValue)
+            #     if indexValue >= 20000 and indexValue < 29000:
+            #         indexValue = tablaDeConstantes.getConstante(indexValue)
                 
-                # print("IndexValue", indexValue)
-                arrVar =  tree.children[0].value
-                arrVar = tablaDeVariables.getVariable(arrVar)
-                arrDirV = arrVar.dirV
-                arrType = arrVar.type
+            #     # print("IndexValue", indexValue)
+            #     arrVar =  tree.children[0].value
+            #     arrVar = tablaDeVariables.getVariable(arrVar)
+            #     arrDirV = arrVar.dirV
+            #     arrType = arrVar.type
                 
-                pType.append(arrType)
-                pOp.append(arrDirV + indexValue)
+            #     pType.append(arrType)
+            #     pOp.append(arrDirV + indexValue)
         
 
     
@@ -846,6 +901,7 @@ class NeuralPoints(Visitor):
                 exit()
             exist = tablaDeVariables.getVariable(funcVars[i][0])
             # print("function sub", function.type)
+            cuadruplos.writeCuadruplos()
             varDir = function.variables[function.params[i][0]].dirV
             if exist != None:
                 cuadruplos.addCuadruplo("PARAM", exist.dirV, None, varDir)
@@ -955,18 +1011,26 @@ class NeuralPoints(Visitor):
 
     def np_escritura(self, tree):
         # print("PRINT", pVars, pOp)
-        value = pOp.pop()
-        pType.pop()
-        exist = tablaDeVariables.getVariable(value)
-        dirV = -1
-        if exist != None:
-            if exist.value >= 42000:
-                dirV = exist.value
-            else:
-                dirV = exist.dirV
+
+        #Print arr con contador
+        if len(pOp) == 0:
+            x = 0
+            print(tree)
         else:
-            dirV = value
-        cuadruplos.addCuadruplo("PRINT", None, None, dirV)
+            value = pOp.pop()
+            pType.pop()
+            exist = tablaDeVariables.getVariable(value)
+            dirV = -1
+            if exist != None:
+                if exist.value == "N/A":
+                    dirV = exist.dirV
+                elif exist.value >= 42000:
+                    dirV = exist.value
+                else:
+                    dirV = exist.dirV
+            else:
+                dirV = value
+            cuadruplos.addCuadruplo("PRINT", None, None, dirV)
         # print("print final",pOp,pType)
     
     # def np_escritura_arr(self,tree):
@@ -989,49 +1053,84 @@ class NeuralPoints(Visitor):
     #* Funcion para crear el cuadruplo logico
     def np_logico_2(self, tree):
         global contVariablesTemporales, contTempBool
-        # print("Logico", pOp, pType, pOper)
+        # print("Logico", pOp, pType, pOper, pVars)
+        cuadruplos.writeCuadruplos
+
+        # if len(pVars) > 0:
+        #     if len(pVars) == 2:
+        #         pVars.pop()
+        #     elif len(pVars) == 4:
+        #         x=1
+        #     else:
+        #         pass
+             
+
         if len(pOper) > 0:
-            right_operand = pOp.pop()
-            left_operand = pOp.pop()
-            operator = pOper.pop()
-            right_type = pType.pop()
-            left_type = pType.pop()
-            result_type = semantic_Cube.getValue(operator,left_type, right_type)
-            if result_type == "error":
-                print("Error: Tipo de dato no valido")
-                exit()
-            temp = memoria.booleanTemporal
-            existLeft = tablaDeVariables.getVariable(left_operand)
-            existRight = tablaDeVariables.getVariable(right_operand)
-            if existLeft != None:
-                left_operand = existLeft.dirV
-            if existRight != None:
-                right_operand = existRight.dirV
-            cuadruplos.addCuadruplo(operator, left_operand, right_operand, temp)
-            contVariablesTemporales += 1
-            memoria.booleanTemporal += 1
-            contTempBool += 1
-            pOp.append(temp)
-            pType.append(result_type)
-            if pFor != []: #Si hay un for entonces añadir los cuadruplos de igual a VF y comparacion de VC y VF
-                global contTempInt, contIntVars
-                pFor.pop()
-                global contFor
-                dirV = memoria.intLocal
-                memoria.intLocal += 1
-                tablaDeVariables.addVariable(Variable("VF" + str(contFor-1), "int", "N/A", dirV))
-                cuadruplos.addCuadruplo("=", right_operand, None, dirV)
-                contIntVars += 1
-                pSaltos.append(cuadruplos.contador)
+
+            if len(pVars) == 2:
+                pVars.pop()
+                right_operand = pVars.pop()
+                left_operand = pOp.pop()
+                operator = pOper.pop()
+                right_type = pType.pop()
+                left_type = pType.pop()
+                result_type = semantic_Cube.getValue(operator,left_type, right_type)
+                if result_type == "error":
+                    print("Error: Tipos incompatibles en operacion logica")
+                    exit()
                 temp = memoria.booleanTemporal
-                dirVC = tablaDeVariables.getVariable("VC" + str(contFor-1)).dirV
-                cuadruplos.addCuadruplo("<", dirVC, dirV,temp)
+                existLeft = tablaDeVariables.getVariable(left_operand)
+                if existLeft != None:
+                    left_operand = existLeft.dirV
+                cuadruplos.addCuadruplo(operator + 'A', left_operand, right_operand, temp)
+                memoria.booleanTemporal += 1
+                contTempBool += 1
+                pOp.append(temp)
+                pType.append(result_type)
+
+
+            else:
+                right_operand = pOp.pop()
+                left_operand = pOp.pop()
+                operator = pOper.pop()
+                right_type = pType.pop()
+                left_type = pType.pop()
+                result_type = semantic_Cube.getValue(operator,left_type, right_type)
+                if result_type == "error":
+                    print("Error: Tipo de dato no valido")
+                    exit()
+                temp = memoria.booleanTemporal
+                existLeft = tablaDeVariables.getVariable(left_operand)
+                existRight = tablaDeVariables.getVariable(right_operand)
+                if existLeft != None:
+                    left_operand = existLeft.dirV
+                if existRight != None:
+                    right_operand = existRight.dirV
+                cuadruplos.addCuadruplo(operator, left_operand, right_operand, temp)
                 contVariablesTemporales += 1
-                memoria.intTemporal += 1
-                pSaltos.append(cuadruplos.contador)
-                cuadruplos.addCuadruplo("GOTOF",temp, None, "N/A")
-                pOp.pop()
-                pType.pop()
+                memoria.booleanTemporal += 1
+                contTempBool += 1
+                pOp.append(temp)
+                pType.append(result_type)
+                if pFor != []: #Si hay un for entonces añadir los cuadruplos de igual a VF y comparacion de VC y VF
+                    global contTempInt, contIntVars
+                    pFor.pop()
+                    global contFor
+                    dirV = memoria.intLocal
+                    memoria.intLocal += 1
+                    tablaDeVariables.addVariable(Variable("VF" + str(contFor-1), "int", "N/A", dirV))
+                    cuadruplos.addCuadruplo("=", right_operand, None, dirV)
+                    contIntVars += 1
+                    pSaltos.append(cuadruplos.contador)
+                    temp = memoria.booleanTemporal
+                    dirVC = tablaDeVariables.getVariable("VC" + str(contFor-1)).dirV
+                    cuadruplos.addCuadruplo("<", dirVC, dirV,temp)
+                    contVariablesTemporales += 1
+                    memoria.intTemporal += 1
+                    pSaltos.append(cuadruplos.contador)
+                    cuadruplos.addCuadruplo("GOTOF",temp, None, "N/A")
+                    pOp.pop()
+                    pType.pop()
 
     # *Funcion para crear el cuadruplo de la suma y resta
     def cuadruplo_sr(self, tree):

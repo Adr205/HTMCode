@@ -353,10 +353,10 @@ def htmlCode():
                 elif left >= 1000 and left < 9000:
                     left = tablaGlobal[left]
                 elif left >= 42000:
-                    print(left)
-                    print(memoriaVirtual)
+                    # print(left)
+                    # print(memoriaVirtual)
                     dirLeft = memoriaVirtual[left]
-                    print(left)
+                    # print(left)
                     left = memoriaVirtual[dirLeft]
                 else:
                     left = memoriaVirtual[left]
@@ -454,9 +454,6 @@ def htmlCode():
                         left = int(memoriaVirtual[left])
                 else:
                     left = valLeft
-
-            
-
             
             if right >= 20000 and right < 29000:
                 val,type = tablaConst[right]
@@ -476,6 +473,132 @@ def htmlCode():
                     right = valRight
 
             if left == right:
+                memoriaVirtual[result] = True
+            else:
+                memoriaVirtual[result] = False
+            cuadPointer += 1
+        elif operator == '==A':
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                valLeft = memoriaVirtual[left]
+                if valLeft >= 42000:
+                    if left >= 10000 and left < 13000:
+                        left = memoriaVirtual[valLeft]
+                        left = int(memoriaVirtual[left])
+                else:
+                    left = valLeft
+            
+            if right >= 20000 and right < 29000:
+                val,type = tablaConst[right]
+                if type == 'int':
+                    right = int(val)
+                elif type == 'float':
+                    right = float(val)
+                elif type == 'string':
+                    right = val
+                elif type == 'boolean':
+                    right = val
+            else:
+                if right >= 42000:
+                    right = memoriaVirtual[right]
+                    right = memoriaVirtual[right]
+                else:
+                    right = valRight
+
+            if left == right:
+                memoriaVirtual[result] = True
+            else:
+                memoriaVirtual[result] = False
+            cuadPointer += 1
+        elif operator == '>A':
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                valLeft = memoriaVirtual[left]
+                if valLeft >= 42000:
+                    if left >= 10000 and left < 13000:
+                        left = memoriaVirtual[valLeft]
+                        left = int(memoriaVirtual[left])
+                else:
+                    left = valLeft
+            
+            if right >= 20000 and right < 29000:
+                val,type = tablaConst[right]
+                if type == 'int':
+                    right = int(val)
+                elif type == 'float':
+                    right = float(val)
+                elif type == 'string':
+                    right = val
+                elif type == 'boolean':
+                    right = val
+            else:
+                if right >= 42000:
+                    right = memoriaVirtual[right]
+                    right = memoriaVirtual[right]
+                else:
+                    right = valRight
+
+            if left > right:
+                memoriaVirtual[result] = True
+            else:
+                memoriaVirtual[result] = False
+            cuadPointer += 1
+        elif operator == '<A':
+            if left >= 20000 and left < 29000:
+                val,type = tablaConst[left]
+                if type == 'int':
+                    left = int(val)
+                elif type == 'float':
+                    left = float(val)
+                elif type == 'string':
+                    left = val
+                elif type == 'boolean':
+                    left = val
+            else:
+                valLeft = memoriaVirtual[left]
+                if valLeft >= 42000:
+                    if left >= 10000 and left < 13000:
+                        left = memoriaVirtual[valLeft]
+                        left = int(memoriaVirtual[left])
+                else:
+                    left = valLeft
+            
+            if right >= 20000 and right < 29000:
+                val,type = tablaConst[right]
+                if type == 'int':
+                    right = int(val)
+                elif type == 'float':
+                    right = float(val)
+                elif type == 'string':
+                    right = val
+                elif type == 'boolean':
+                    right = val
+            else:
+                if right >= 42000:
+                    right = memoriaVirtual[right]
+                    right = memoriaVirtual[right]
+                else:
+                    right = valRight
+
+            if left < right:
                 memoriaVirtual[result] = True
             else:
                 memoriaVirtual[result] = False

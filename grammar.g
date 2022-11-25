@@ -63,9 +63,11 @@ WHITESPACE: (" " | /\t/ )+
 start: globales main 
 
 globales: funciones globales| varglobales globales | 
+
 funciones: funcionvoid | funcion
 funcionvoid: FUNCION ID np_func_id PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS VOID bloque np_end_func
 funcion: FUNCION ID np_func_id PARENTESIS_I funcvars PARENTESIS_D DOSPUNTOS tipo bloquefunc np_end_func
+
 varglobales: simpleglobal | compuestoglobal
 simpleglobal: DECLARE ID DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA np_asignacion | DECLARE ID DOSPUNTOS tipo PUNTOYCOMA
 compuestoglobal:DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo IGUAL expresion PUNTOYCOMA | DECLARE ID CORCHETE_I INT CORCHETE_D DOSPUNTOS tipo PUNTOYCOMA
@@ -79,10 +81,13 @@ np_end_func:
 bloque: LLAVEI bloq bloqx LLAVED
 bloq:  estatuto | declaracion
 bloqx: bloq bloqx |
+
 bloquefunc: LLAVEI bloq bloqx RETURN expresion PUNTOYCOMA np_func_result LLAVED
-estatuto: asignacion | escritura | read  | llamadavoid | ciclos | condicion
 np_func_result:
 
+estatuto: asignacion | escritura | read  | llamadavoid | ciclos | condicion | returnv
+returnv : RETURN expresion PUNTOYCOMA np_func_result np_goto_end
+np_goto_end:
 declaraciones: declaracion declaracionesx
 declaracionesx: declaraciones |
 declaracion: simple | compuesta
@@ -102,13 +107,13 @@ asignacionsimple: ID IGUAL expresion PUNTOYCOMA np_asignacion
 np_asignacion:
 //np_var:
 
-asignacioncompleja: ID CORCHETE_I INT CORCHETE_D IGUAL expresion PUNTOYCOMA np_asignacion | ID CORCHETE_I ID CORCHETE_D IGUAL expresion PUNTOYCOMA np_asignacion | asignacionlista
+asignacioncompleja: ID CORCHETE_I INT CORCHETE_D IGUAL np_arr expresion PUNTOYCOMA np_asignacion | ID CORCHETE_I ID CORCHETE_D IGUAL np_arr expresion PUNTOYCOMA np_asignacion | asignacionlista
 asignacionlista: ID IGUAL expresionlista PUNTOYCOMA
 expresionlista: CORCHETE_I expresion explista CORCHETE_D
 explista: COMA expresion explista |
+np_arr:
 
 escritura: PRINT PARENTESIS_I escriturax PARENTESIS_D PUNTOYCOMA
-//escriturax: expresion escrituray  | STRING escrituray
 escriturax: ID CORCHETE_I INT CORCHETE_D escrituray | ID CORCHETE_I ID CORCHETE_D escrituray | expresion escrituray
 escrituray:  np_escritura COMA escriturax | np_escritura
 np_escritura:

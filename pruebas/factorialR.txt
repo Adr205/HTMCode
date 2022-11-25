@@ -1,0 +1,26 @@
+
+
+function factorial(n:int): int {
+    var factorialRes: int;
+    factorialRes = 1;
+    
+    if(n == 1){
+        return 1;
+    }
+
+    print(n);
+
+    return factorial(n - 1) * n;
+}
+
+
+
+
+main(){
+    var x : int;
+    var result : int;
+    print("Ingresa el valor de x: ");
+    input(x);
+    result = factorial(x);
+    print("result", result);
+}

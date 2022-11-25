@@ -3,7 +3,8 @@ from lark import Visitor
 from classes.NeuralPoints import NeuralPoints
 from classes.Semantic_cube import SemanticCube
 from htmcode import *
-test = './pruebas/enterprise.txt'
+# test = './pruebas/factorialR.txt'
+test = './pruebas/help.txt'
 
 
 parser = Lark(open("grammar.g", 'r').read()) 

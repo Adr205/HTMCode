@@ -57,7 +57,8 @@ class Memoria():
                 'int': 30000,
                 'float': 33000,
                 'string': 36000,
-                'boolean': 39000
+                'boolean': 39000,
+                'pointer': 42000
             }
         }
         #* Memoria de ejecucion
@@ -83,6 +84,7 @@ class Memoria():
         self.floatTemporal = 33000
         self.stringTemporal = 36000
         self.booleanTemporal = 39000
+        self.pointerTemporal = 42000
 
     def __str__(self):
         return str(self.memoria)

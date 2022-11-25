@@ -2,7 +2,7 @@ from classes.VariablesTable import VariablesTable as vt
 from classes.Variable import Variable as var
 class Function:
 
-    def __init__(self, name, type, dirV, params=[], variables={}, intTemp = 0, floatTemp = 0, booleanTemp = 0, stringTemp = 0, intVar = 0, floatVar = 0, booleanVar = 0, stringVar = 0):
+    def __init__(self, name, type, dirV, params=[], variables={}, intTemp = 0, floatTemp = 0, booleanTemp = 0, stringTemp = 0, intVar = 0, floatVar = 0, booleanVar = 0, stringVar = 0, pointerTemp = 0):
         self.name = name
         self.type = type
         self.params = params
@@ -16,6 +16,7 @@ class Function:
         self.floatVar = floatVar
         self.booleanVar = booleanVar
         self.stringVar = stringVar
+        self.pointerTemp = pointerTemp
 
     def addParameters(self, param, type):
         variable = var.Variable(param, type)
